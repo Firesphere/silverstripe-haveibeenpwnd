@@ -1,0 +1,49 @@
+version: 2
+jobs:
+  build:
+    docker:
+      - image: brettt89/silverstripe-web
+        environment:
+          - SS_DATABASE_CLASS=MySQLPDODatabase
+          - SS_DATABASE_SERVER=127.0.0.1
+          - SS_DATABASE_USERNAME=root
+          - SS_DATABASE_PASSWORD=ubuntu
+          - SS_DATABASE_NAME=circle_test
+          - SS_ENVIRONMENT_TYPE=test
+      - image: circleci/mysql:5.7
+        environment:
+          - MYSQL_USER=root
+          - MYSQL_ROOT_PASSWORD=ubuntu
+          - MYSQL_DATABASE=circle_test
+          - MYSQL_HOST=127.0.0.1
+
+    working_directory: ~/var/www
+
+    steps:
+      - run: apt-get update && apt-get install -y apt-transport-https lsb-release
+      # Install additional requirements
+      - run: composer self-update
+      - checkout
+      - restore_cache:
+          keys:
+            - v2-cache-{{ checksum "composer.lock" }}
+            # fallback to using the latest cache if no exact match is found
+            - v2-cache-
+
+      - run: composer install
+      # Save all dependencies to cache
+      - save_cache:
+          key: v2-cache-{{ checksum "composer.lock" }}
+          paths:
+            - app
+            - mysite
+            - vendor
+            - resource
+
+      # run tests!
+      - run: vendor/bin/sake dev/build
+      - run: vendor/bin/phpunit --coverage-clover=coverage.xml --log-junit ./coverage/junit.xml -d memory_limit=512M tests/unit
+      - run: vendor/bin/phpcs --standard=phpcs.xml.dist src tests/unit
+      - run: bash <(curl -s https://codecov.io/bash) -f coverage.xml
+      - store_test_results:
+          path: ~/var/www/coverage

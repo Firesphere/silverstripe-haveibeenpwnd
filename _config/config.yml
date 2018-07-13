@@ -1,0 +1,7 @@
+---
+name: HaveIBeenPwnd
+---
+Firesphere\HaveIBeenPwnd\Extensions\MemberExtension:
+  allow_pwnd: false
+  save_pwnd: false
+  pwn_treshold: 10

@@ -1,0 +1,3 @@
+SilverStripe\Security\Member:
+  extensions:
+    - Firesphere\HaveIBeenPwnd\Extensions\MemberExtension
