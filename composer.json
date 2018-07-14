@@ -1,46 +1,60 @@
 {
-  "name": "firesphere/haveibeenpwnd",
-  "description": "Check if a user password is found in the Have I Been Pwnd database.",
-  "type": "silverstripe-vendormodule",
-  "keywords": [
-    "silverstripe",
-    "HaveIBeenPwnd",
-    "Password"
-  ],
-  "license": "BSD-3-Clause",
-  "authors": [
-    {
-      "name": "Simon 'Firesphere' Erkelens",
-      "email": "simonerkelens@silverstripe.com"
-    }
-  ],
-  "require": {
-    "php": ">=5.6.0",
-    "silverstripe/recipe-cms": "^4"
-  },
-  "require-dev": {
-    "scriptfusion/phpunit-immediate-exception-printer": "^1",
-    "phpunit/phpunit": "^5.7",
-    "squizlabs/php_codesniffer": "3.*"
-  },
-  "extra": {
-    "branch-alias": {
-      "1.x-dev": "1.0.x-dev",
-      "dev-master": "1.x-dev"
+    "name": "firesphere/haveibeenpwnd",
+    "description": "Check if a user password is found in the Have I Been Pwnd database.",
+    "type": "silverstripe-vendormodule",
+    "keywords": [
+        "silverstripe",
+        "HaveIBeenPwnd",
+        "Password"
+    ],
+    "license": "BSD-3-Clause",
+    "authors": [
+        {
+            "name": "Simon 'Firesphere' Erkelens",
+            "email": "simonerkelens@silverstripe.com"
+        }
+    ],
+    "require": {
+        "php": ">=5.6.0",
+        "silverstripe/recipe-cms": "^4"
     },
-    "autoload": {
-      "psr-4": {
-        "Firesphere\\HaveIBeenPwnd\\": "src/",
-        "Firesphere\\HaveIBeenPwnd\\Extensions": "src/extensions"
-      }
+    "require-dev": {
+        "scriptfusion/phpunit-immediate-exception-printer": "^1",
+        "phpunit/phpunit": "^5.7",
+        "squizlabs/php_codesniffer": "3.*"
     },
-    "autoload-dev": {
-      "psr-4": {
-        "Firesphere\\HaveIBeenPwnd\\": "src/",
-        "Firesphere\\HaveIBeenPwnd\\Extensions": "src/extensions"
-      }
-    }
-  },
-  "prefer-stable": true,
-  "minimum-stability": "dev"
+    "extra": {
+        "branch-alias": {
+            "1.x-dev": "1.0.x-dev",
+            "dev-master": "1.x-dev"
+        },
+        "autoload": {
+            "psr-4": {
+                "Firesphere\\HaveIBeenPwnd\\": "src/",
+                "Firesphere\\HaveIBeenPwnd\\Extensions": "src/extensions"
+            }
+        },
+        "autoload-dev": {
+            "psr-4": {
+                "Firesphere\\HaveIBeenPwnd\\": "src/",
+                "Firesphere\\HaveIBeenPwnd\\Extensions": "src/extensions"
+            }
+        },
+        "project-files-installed": [
+            "mysite/.htaccess",
+            "mysite/_config.php",
+            "mysite/_config/mysite.yml",
+            "mysite/code/Page.php",
+            "mysite/code/PageController.php"
+        ],
+        "public-files-installed": [
+            ".htaccess",
+            "index.php",
+            "install-frameworkmissing.html",
+            "install.php",
+            "web.config"
+        ]
+    },
+    "prefer-stable": true,
+    "minimum-stability": "dev"
 }
