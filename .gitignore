@@ -5,7 +5,6 @@ docs/en/apidocs
 !docs/en/*.md
 /mysite
 /*.php
-composer.lock
 vendor
 web.config
 install-frameworkmissing.html
