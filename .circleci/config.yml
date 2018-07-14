@@ -30,13 +30,12 @@ jobs:
             # fallback to using the latest cache if no exact match is found
             - v2-cache-
       - run: composer install
+      - run: composer vendor-expose
       # Save all dependencies to cache
       - save_cache:
           key: v2-cache-{{ checksum "composer.lock" }}
           paths:
-            - mysite
             - vendor
-            - resources
 
       # run tests!
       - run: vendor/bin/sake dev/build skipannotation=true
