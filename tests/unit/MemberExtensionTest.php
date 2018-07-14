@@ -26,7 +26,8 @@ class MemberExtensionTest extends SapphireTest
         $this->assertNull($fields->dataFieldByName('HelpText'));
 
         $this->member->PasswordIsPwnd = true;
-        $this->member->write();
+        $id = $this->member->write();
+        $this->member = Member::get()->byID($id);
         $fields = $this->member->getCMSFields();
 
         $this->assertInstanceOf(LiteralField::class, $fields->dataFieldByName('HelpText'));
