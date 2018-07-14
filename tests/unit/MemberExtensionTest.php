@@ -15,7 +15,7 @@ class MemberExtensionTest extends SapphireTest
 
     protected function setUp()
     {
-        $this->member = Member::create(['Email' => 'test@test.com', 'PasswordIsPwnd' => false]);
+        $this->member = Member::create(['Email' => 'test@test.com', 'PasswordIsPwnd' => false, 'Password' => uniqid('_Firesphere\\HaveIBeenPwnd\\Tests_', true)]);
         return parent::setUp();
     }
 
