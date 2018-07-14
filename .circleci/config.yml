@@ -24,12 +24,8 @@ jobs:
       # Install additional requirements
       - run: composer self-update
       - checkout
-      - restore_cache:
-          keys:
-            - v2-cache-{{ checksum "composer.lock" }}-{{ checksum "composer.json" }}
-            # fallback to using the latest cache if no exact match is found
-            - v2-cache-
       - run: composer update
+      - run: cp -R vendor/silverstripe/recipe-cms .
       - run: composer vendor-expose
       # Save all dependencies to cache
       - save_cache:
