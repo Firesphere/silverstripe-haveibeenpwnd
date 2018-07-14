@@ -34,13 +34,12 @@ jobs:
       - save_cache:
           key: v2-cache-{{ checksum "composer.lock" }}
           paths:
-            - app
             - mysite
             - vendor
-            - resource
+            - resources
 
       # run tests!
-      - run: vendor/bin/sake dev/build
+      - run: vendor/bin/sake dev/build skipannotation=true
       - run: vendor/bin/phpunit --coverage-clover=coverage.xml --log-junit ./coverage/junit.xml -d memory_limit=512M tests/unit
       - run: vendor/bin/phpcs --standard=phpcs.xml.dist src tests/unit
       - run: bash <(curl -s https://codecov.io/bash) -f coverage.xml
