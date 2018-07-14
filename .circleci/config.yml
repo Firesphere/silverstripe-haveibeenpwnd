@@ -25,7 +25,7 @@ jobs:
       - run: composer self-update
       - checkout
       - run: composer update
-      - run: cp -R vendor/silverstripe/recipe-cms .
+      - run: cp -R vendor/silverstripe/recipe-cms/* .
       - run: composer vendor-expose
       # Save all dependencies to cache
       - save_cache:
@@ -34,7 +34,7 @@ jobs:
             - vendor
 
       # run tests!
-      - run: vendor/bin/sake dev/build skipannotation=true
+      - run: vendor/bin/sake dev/build flush=all skipannotation=true
       - run: vendor/bin/phpunit --coverage-clover=coverage.xml --log-junit ./coverage/junit.xml -d memory_limit=512M tests/unit
       - run: vendor/bin/phpcs --standard=phpcs.xml.dist src tests/unit
       - run: bash <(curl -s https://codecov.io/bash) -f coverage.xml
