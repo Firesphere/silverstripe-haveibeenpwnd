@@ -16,8 +16,7 @@
   ],
   "require": {
     "php": ">=5.6.0",
-    "silverstripe/framework": "^4",
-    "silverstripe/versioned": "^1.0"
+    "silverstripe/recipe-cms": "^4"
   },
   "require-dev": {
     "scriptfusion/phpunit-immediate-exception-printer": "^1",
