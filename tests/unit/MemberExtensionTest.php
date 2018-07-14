@@ -15,13 +15,12 @@ class MemberExtensionTest extends SapphireTest
 
     protected function setUp()
     {
-        $this->member = Member::create();
+        $this->member = Member::create(['Email' => 'test@test.com', 'PasswordIsPwnd' => false]);
         return parent::setUp();
     }
 
     public function testUpdateCMSFields()
     {
-        $this->member->PasswordIsPwnd = false;
         $fields = $this->member->getCMSFields();
 
         $this->assertNull($fields->dataFieldByName('HelpText'));
