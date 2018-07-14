@@ -29,7 +29,6 @@ jobs:
             - v2-cache-{{ checksum "composer.lock" }}
             # fallback to using the latest cache if no exact match is found
             - v2-cache-
-
       - run: composer install
       # Save all dependencies to cache
       - save_cache:

@@ -39,21 +39,7 @@
                 "Firesphere\\HaveIBeenPwnd\\": "src/",
                 "Firesphere\\HaveIBeenPwnd\\Extensions": "src/extensions"
             }
-        },
-        "project-files-installed": [
-            "mysite/.htaccess",
-            "mysite/_config.php",
-            "mysite/_config/mysite.yml",
-            "mysite/code/Page.php",
-            "mysite/code/PageController.php"
-        ],
-        "public-files-installed": [
-            ".htaccess",
-            "index.php",
-            "install-frameworkmissing.html",
-            "install.php",
-            "web.config"
-        ]
+        }
     },
     "prefer-stable": true,
     "minimum-stability": "dev"
