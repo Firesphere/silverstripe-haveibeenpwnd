@@ -6,8 +6,10 @@ use GuzzleHttp\Client;
 use Psr\Http\Message\ResponseInterface;
 use SilverStripe\Core\Config\Configurable;
 use SilverStripe\Core\Convert;
+use SilverStripe\Dev\Debug;
 use SilverStripe\Forms\FieldList;
 use SilverStripe\Forms\LiteralField;
+use SilverStripe\Forms\Tab;
 use SilverStripe\ORM\DataExtension;
 use SilverStripe\ORM\ValidationException;
 use SilverStripe\ORM\ValidationResult;
@@ -51,11 +53,11 @@ class MemberExtension extends DataExtension
         to see if your passwords are secure and safe.<br />
         Furthermore, <a href="https://www.troyhunt.com/introducing-306-million-freely-downloadable-pwned-passwords/">Troy Hunt explains why and how this service is important</a>.');
 
+            $tab = Tab::create('HaveIBeenPwnd', 'Have I Been Pwnd?');
+            $fields->add($tab);
             $help = LiteralField::create('Helptext', '<p>' . $text . '</p>');
             $fields->addFieldToTab('Root.HaveIBeenPwnd', $help);
         }
-
-        parent::updateCMSFields($fields);
     }
 
     /**
