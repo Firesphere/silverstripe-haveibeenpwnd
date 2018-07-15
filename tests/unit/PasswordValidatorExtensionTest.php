@@ -11,7 +11,6 @@ use SilverStripe\Security\Member;
 
 class PasswordValidatorExtensionTest extends SapphireTest
 {
-
     public function testUpdateValidatePassword()
     {
         /** @var PasswordValidatorExtension $extension */

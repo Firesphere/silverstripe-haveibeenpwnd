@@ -9,7 +9,6 @@ use SilverStripe\Dev\SapphireTest;
 
 class HaveIBeenPwndPageControllerTest extends SapphireTest
 {
-
     public function testClassExists()
     {
         $page = Injector::inst()->get(HaveIBeenPwndPage::class);
