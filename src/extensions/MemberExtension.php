@@ -56,6 +56,11 @@ class MemberExtension extends DataExtension
             $fields->addFieldToTab('Root.HaveIBeenPwnd', $help);
         }
 
+        if ($this->owner->BreachedSites) {
+            $fields->findOrMakeTab('Root.HaveIBeenPwnd', _t(static::class . '.PWNDTAB', 'Have I Been Pwnd?'));
+            $fields->addFieldToTab('Root.HaveIBeenPwnd', ReadonlyField::create('BreachedSites', 'Breached sites'));
+        }
+
         $fields->addFieldToTab('Root.Main', $countField = ReadonlyField::create('PasswordIsPwnd', 'Pwnd Count'));
         $countField->setDescription(_t(static::class . '.AMOUNT', 'Amount of times the password appears in the Have I Been Pwnd database'));
     }

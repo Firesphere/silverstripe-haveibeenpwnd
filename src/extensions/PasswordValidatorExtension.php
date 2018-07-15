@@ -8,7 +8,6 @@
 
 namespace Firesphere\HaveIBeenPwnd\Extensions;
 
-
 use SilverStripe\Core\Config\Configurable;
 use SilverStripe\Core\Extension;
 use SilverStripe\ORM\ValidationResult;
@@ -39,12 +38,10 @@ class PasswordValidatorExtension extends Extension
             usleep(1500); // We need to conform to the FUP, max 1 request per 1500ms
             // Always mark as Pwnd if it's true
             $member->PasswordIsPwnd = $isPwndCount;
-            if ($storeBreach) {
-                $breached = $member->checkPwndEmail($valid);
-            }
+            $breached = $member->checkPwndEmail($valid);
         }
 
-        if ($breached !== '') {
+        if ($storeBreach) {
             $member->BreachedSites = $breached;
         }
 
@@ -55,5 +52,4 @@ class PasswordValidatorExtension extends Extension
             $valid->addError($breached);
         }
     }
-
 }

@@ -32,6 +32,20 @@ Firesphere\HaveIBeenPwnd\Extensions\PasswordValidatorExtension:
 `pwn_treshold` If set to 0, a user may use the password despite it being breached. If set to another number, the password may be used if the amount of breaches is lower than the treshold.
 This parameter is ignored if `allow_pwnd` is set to false
 
+## Applying the validator extension to other PasswordValidators
+
+Add the following to either of your config yml files. (Suggested is using an `extensions.yml` file)
+
+```yaml
+
+MyVendor\MyNameSpace\MyPasswordValidator:
+  extensions:
+    - Firesphere\HaveIBeenPwnd\Extensions\PasswordValidatorExtension
+
+```
+
+Replacing the vendor\namespace\validator with your own Validator namespace and classname
+
 # Actual license
 
 This module is published under BSD 3-clause license, although these are not in the actual classes, the license does apply:

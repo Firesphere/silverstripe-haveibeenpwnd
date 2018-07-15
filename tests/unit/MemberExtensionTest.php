@@ -25,5 +25,11 @@ class MemberExtensionTest extends SapphireTest
 
         $this->assertInstanceOf(ReadonlyField::class, $fields->dataFieldByName('PasswordIsPwnd'));
         $this->assertNull($fields->dataFieldByName('Helptext'));
+
+        $this->member->BreachedSites = '000error, test';
+
+        $fields = $this->member->getCMSFields();
+
+        $this->assertInstanceOf(ReadonlyField::class, $fields->dataFieldByName('BreachedSites'));
     }
 }

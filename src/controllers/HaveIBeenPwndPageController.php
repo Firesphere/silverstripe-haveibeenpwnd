@@ -7,41 +7,44 @@ use SilverStripe\Control\HTTPRequest;
 use SilverStripe\Security\Member;
 use SilverStripe\Security\Security;
 
-/**
- * Class \Firesphere\HaveIBeenPwnd\Controllers\HaveIBeenPwndPageController
- *
- */
-class HaveIBeenPwndPageController extends PageController
-{
-    private static $allowed_actions = [
-        'checkEmail',
-        'checkPassword'
-    ];
+if (class_exists(PageController::class)) {
 
-    private static $url_handlers = [
-        'check-email' => 'checkEmail',
-        'check-password' => 'checkPassword'
-    ];
-
-
-    public function checkEmail(HTTPRequest $request)
+    /**
+     * Class \Firesphere\HaveIBeenPwnd\Controllers\HaveIBeenPwndPageController
+     *
+     */
+    class HaveIBeenPwndPageController extends PageController
     {
-        /** @var Member|null $user */
-        $user = Security::getCurrentUser();
+        private static $allowed_actions = [
+            'checkEmail',
+            'checkPassword'
+        ];
 
-        if ($user) {
-            $breachedEmails = $user->checkPwndEmail();
+        private static $url_handlers = [
+            'check-email'    => 'checkEmail',
+            'check-password' => 'checkPassword'
+        ];
 
-            $contentText = str_replace("\r\n", '<br />', $breachedEmails);
 
-            $this->dataRecord->Content .= '<p>' . $contentText . '</p>';
+        public function checkEmail(HTTPRequest $request)
+        {
+            /** @var Member|null $user */
+            $user = Security::getCurrentUser();
+
+            if ($user) {
+                $breachedEmails = $user->checkPwndEmail();
+
+                $contentText = str_replace("\r\n", '<br />', $breachedEmails);
+
+                $this->dataRecord->Content .= '<p>' . $contentText . '</p>';
+            }
+
+            return $this;
         }
 
-        return $this;
-    }
-
-    public function checkPassword(HTTPRequest $request)
-    {
-        // @todo
+        public function checkPassword(HTTPRequest $request)
+        {
+            // @todo
+        }
     }
 }
