@@ -6,6 +6,7 @@ use GuzzleHttp\Client;
 use Psr\Http\Message\ResponseInterface;
 use SilverStripe\Core\Config\Configurable;
 use SilverStripe\Core\Convert;
+use SilverStripe\Core\Injector\Injector;
 use SilverStripe\Forms\FieldList;
 use SilverStripe\Forms\LiteralField;
 use SilverStripe\Forms\ReadonlyField;
@@ -73,16 +74,15 @@ class MemberExtension extends DataExtension
     /**
      * @param $pwd
      * @return int
-     * @throws \GuzzleHttp\Exception\GuzzleException
      */
     public function checkPwndPassword($pwd)
     {
         $sha = sha1($pwd);
         $shaStart = substr($sha, 0, 5);
         $shaEnd = substr($sha, 5);
-        $client = new Client([
+        $client = Injector::inst()->createWithArgs(Client::class, [[
             'base_uri' => static::PWND_API_URL
-        ]);
+        ]]);
         $result = $client->request('GET', 'range/' . $shaStart, [
             'headers' => [
                 'user-agent'  => static::USER_AGENT,
@@ -122,9 +122,9 @@ class MemberExtension extends DataExtension
         $uniqueField = Member::config()->get('unique_identifier_field');
         $account = $this->owner->{$uniqueField};
 
-        $client = new Client([
+        $client = Injector::inst()->createWithArgs(Client::class, [[
             'base_uri' => static::PWND_URL
-        ]);
+        ]]);
 
         $result = $client->request('GET', 'breachedaccount/' . $account . '?truncateResponse=true', [
             'headers' => [
