@@ -8,8 +8,7 @@ use SilverStripe\Core\Injector\Injector;
 use SilverStripe\Dev\SapphireTest;
 use SilverStripe\Security\Security;
 
-if (class_exists(HaveIBeenPwndPageController::class))
-{
+if (class_exists(HaveIBeenPwndPageController::class)) {
     class HaveIBeenPwndPageControllerTest extends SapphireTest
     {
         public function testClassExists()
