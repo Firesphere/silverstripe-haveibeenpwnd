@@ -6,15 +6,33 @@ use Firesphere\HaveIBeenPwnd\Controllers\HaveIBeenPwndPageController;
 use Firesphere\HaveIBeenPwnd\Models\HaveIBeenPwndPage;
 use SilverStripe\Core\Injector\Injector;
 use SilverStripe\Dev\SapphireTest;
+use SilverStripe\Security\Security;
 
-class HaveIBeenPwndPageControllerTest extends SapphireTest
+if (class_exists(HaveIBeenPwndPageController::class))
 {
-    public function testClassExists()
+    class HaveIBeenPwndPageControllerTest extends SapphireTest
     {
-        $page = Injector::inst()->get(HaveIBeenPwndPage::class);
+        public function testClassExists()
+        {
+            $page = Injector::inst()->get(HaveIBeenPwndPage::class);
 
-        $controller = Injector::inst()->get(HaveIBeenPwndPageController::class, $page);
+            $controller = Injector::inst()->get(HaveIBeenPwndPageController::class, $page);
 
-        $this->assertInstanceOf(HaveIBeenPwndPageController::class, $controller);
+            $this->assertInstanceOf(HaveIBeenPwndPageController::class, $controller);
+        }
+
+        public function testCheckEmail()
+        {
+            $page = Injector::inst()->get(HaveIBeenPwndPage::class);
+
+            $controller = Injector::inst()->get(HaveIBeenPwndPageController::class, $page);
+
+            Security::setCurrentUser(null);
+
+            $response = $controller->checkEmail();
+
+            // If there's no user, it should just return itself
+            $this->assertInstanceOf(HaveIBeenPwndPageController::class, $response);
+        }
     }
 }
