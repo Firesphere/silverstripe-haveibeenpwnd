@@ -6,11 +6,9 @@ use GuzzleHttp\Client;
 use Psr\Http\Message\ResponseInterface;
 use SilverStripe\Core\Config\Configurable;
 use SilverStripe\Core\Convert;
-use SilverStripe\Dev\Debug;
 use SilverStripe\Forms\FieldList;
 use SilverStripe\Forms\LiteralField;
 use SilverStripe\Forms\ReadonlyField;
-use SilverStripe\Forms\Tab;
 use SilverStripe\ORM\DataExtension;
 use SilverStripe\Security\Member;
 
@@ -62,7 +60,10 @@ class MemberExtension extends DataExtension
         }
 
         $fields->addFieldToTab('Root.Main', $countField = ReadonlyField::create('PasswordIsPwnd', 'Pwnd Count'));
-        $countField->setDescription(_t(static::class . '.AMOUNT', 'Amount of times the password appears in the Have I Been Pwnd database'));
+        $countField->setDescription(_t(
+            static::class . '.AMOUNT',
+            'Amount of times the password appears in the Have I Been Pwnd database'
+        ));
     }
 
     /**
@@ -89,6 +90,26 @@ class MemberExtension extends DataExtension
     }
 
     /**
+     * @param ResponseInterface $result
+     * @param $shaEnd
+     * @return int
+     */
+    private function checkList($result, $shaEnd)
+    {
+        $count = 0;
+        $shaEnd = strtoupper($shaEnd);
+        $suffixes = explode("\r\n", $result->getBody());
+        foreach ($suffixes as $suffix) {
+            list($suffix, $pwnCount) = explode(':', $suffix);
+            if ($suffix === $shaEnd) {
+                $count += (int)$pwnCount;
+            }
+        }
+
+        return $count;
+    }
+
+    /**
      * @return string
      * @throws \GuzzleHttp\Exception\GuzzleException
      */
@@ -109,26 +130,6 @@ class MemberExtension extends DataExtension
         ]);
 
         return $this->checkBreaches($result);
-    }
-
-    /**
-     * @param ResponseInterface $result
-     * @param $shaEnd
-     * @return int
-     */
-    private function checkList($result, $shaEnd)
-    {
-        $count = 0;
-        $shaEnd = strtoupper($shaEnd);
-        $suffixes = explode("\r\n", $result->getBody());
-        foreach ($suffixes as $suffix) {
-            list($suffix, $pwnCount) = explode(':', $suffix);
-            if ($suffix === $shaEnd) {
-                $count += (int)$pwnCount;
-            }
-        }
-
-        return $count;
     }
 
     /**

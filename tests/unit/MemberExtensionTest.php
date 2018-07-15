@@ -13,12 +13,6 @@ class MemberExtensionTest extends SapphireTest
      */
     protected $member;
 
-    protected function setUp()
-    {
-        $this->member = Member::create(['Email' => 'test@test.com', 'PasswordIsPwnd' => false, 'Password' => uniqid('_Firesphere\\HaveIBeenPwnd\\Tests_', true)]);
-        return parent::setUp();
-    }
-
     public function testUpdateCMSFields()
     {
         $fields = $this->member->getCMSFields();
@@ -31,5 +25,16 @@ class MemberExtensionTest extends SapphireTest
         $fields = $this->member->getCMSFields();
 
         $this->assertInstanceOf(ReadonlyField::class, $fields->dataFieldByName('BreachedSites'));
+    }
+
+    protected function setUp()
+    {
+        $this->member = Member::create([
+            'Email'          => 'test@test.com',
+            'PasswordIsPwnd' => false,
+            'Password'       => uniqid('_Firesphere\\HaveIBeenPwnd\\Tests_', true)
+        ]);
+
+        return parent::setUp();
     }
 }

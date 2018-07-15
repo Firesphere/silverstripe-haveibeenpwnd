@@ -34,9 +34,11 @@ jobs:
       - run: composer vendor-expose
       # Save all dependencies to cache
       - save_cache:
-          key: v2-cache-{{ checksum "composer.lock" }}-{{ checksum "composer.json" }}
+          key: v2-cache-{{ checksum "composer.lock" }}
           paths:
             - vendor
+            - mysite
+            - resources
 
       # run tests!
       - run: vendor/bin/sake dev/build flush=all skipannotation=true
