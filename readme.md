@@ -2,6 +2,14 @@
 [![codecov](https://codecov.io/gh/Firesphere/silverstripe-haveibeenpwnd/branch/master/graph/badge.svg)](https://codecov.io/gh/Firesphere/silverstripe-haveibeenpwnd)
 [![Maintainability](https://api.codeclimate.com/v1/badges/bfc8d4c5de506318af0b/maintainability)](https://codeclimate.com/github/Firesphere/silverstripe-haveibeenpwnd/maintainability)
 
+# _**WARNING**_
+
+This module is not a replacement for two factor authentication, nor will it improve security for existing users that don't change their passwords.
+
+This module is only to make sure no known passwords are re-used.
+
+Although it adds to the user security te enforce unique passwords, this module will not prevent any password leaks like the ones used by HaveIBeenPwnd.
+
 # Have I Been Pwnd for SilverStripe
 
 This module checks on password change, if the SHA1 of the password appears in the Have I Been Pwnd database.
