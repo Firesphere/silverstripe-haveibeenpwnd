@@ -1,3 +1,7 @@
+[![CircleCI](https://img.shields.io/circleci/project/github/Firesphere/silverstripe-haveibeenpwnd.svg)](https://circleci.com/gh/Firesphere/silverstripe-haveibeenpwnd)
+[![codecov](https://codecov.io/gh/Firesphere/silverstripe-haveibeenpwnd/branch/master/graph/badge.svg)](https://codecov.io/gh/Firesphere/silverstripe-haveibeenpwnd)
+[![Maintainability](https://api.codeclimate.com/v1/badges/bfc8d4c5de506318af0b/maintainability)](https://codeclimate.com/github/Firesphere/silverstripe-haveibeenpwnd/maintainability)
+
 # Have I Been Pwnd for SilverStripe
 
 This module checks on password change, if the SHA1 of the password appears in the Have I Been Pwnd database.

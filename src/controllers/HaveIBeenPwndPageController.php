@@ -26,7 +26,7 @@ if (class_exists(PageController::class)) {
         ];
 
 
-        public function checkEmail(HTTPRequest $request)
+        public function checkEmail()
         {
             /** @var Member|null $user */
             $user = Security::getCurrentUser();
@@ -42,7 +42,7 @@ if (class_exists(PageController::class)) {
             return $this;
         }
 
-        public function checkPassword(HTTPRequest $request)
+        public function checkPassword()
         {
             // @todo
         }

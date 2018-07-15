@@ -23,6 +23,10 @@ class MemberExtension extends DataExtension
 {
     use Configurable;
 
+    /**
+     * @todo change the URLS to be configurable, so we can reliably test against
+     * @todo a local URL for CircleCI
+     */
     const PWND_URL = 'https://haveibeenpwned.com/api/';
 
     const PWND_API_URL = 'https://api.pwnedpasswords.com/';

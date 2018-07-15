@@ -4,7 +4,7 @@ namespace Firesphere\HaveIBeenPwnd\Models;
 
 use Firesphere\HaveIBeenPwnd\Controllers\HaveIBeenPwndPageController;
 use Page;
-
+var_dump(class_exists(Page::class));
 if (class_exists(Page::class)) {
     /**
      * Class \Firesphere\HaveIBeenPwnd\Models\HaveIBeenPwndPage
