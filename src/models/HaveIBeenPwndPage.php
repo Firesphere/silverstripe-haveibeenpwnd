@@ -14,7 +14,7 @@ class HaveIBeenPwndPage extends Page
     private static $table_name = 'HaveIBeenPwndPage';
 
     /**
-     * Get the controller for this page
+     * Get the controller name for this page
      *
      * @return string
      */

@@ -1,3 +1,6 @@
 SilverStripe\Security\Member:
   extensions:
     - Firesphere\HaveIBeenPwnd\Extensions\MemberExtension
+SilverStripe\Security\PasswordValidator:
+  extensions:
+    - Firesphere\HaveIBeenPwnd\Extensions\PasswordValidatorExtension

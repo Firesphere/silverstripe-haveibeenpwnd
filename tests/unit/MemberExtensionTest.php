@@ -2,11 +2,8 @@
 
 namespace Firesphere\HaveIBeenPwnd\Tests;
 
-use Firesphere\HaveIBeenPwnd\Extensions\MemberExtension;
-use SilverStripe\Core\Injector\Injector;
-use SilverStripe\Dev\Debug;
 use SilverStripe\Dev\SapphireTest;
-use SilverStripe\Forms\LiteralField;
+use SilverStripe\Forms\ReadonlyField;
 use SilverStripe\Security\Member;
 
 class MemberExtensionTest extends SapphireTest
@@ -26,7 +23,7 @@ class MemberExtensionTest extends SapphireTest
     {
         $fields = $this->member->getCMSFields();
 
+        $this->assertInstanceOf(ReadonlyField::class, $fields->dataFieldByName('PasswordIsPwnd'));
         $this->assertNull($fields->dataFieldByName('Helptext'));
-
     }
 }

@@ -9,17 +9,16 @@ use SilverStripe\Core\Convert;
 use SilverStripe\Dev\Debug;
 use SilverStripe\Forms\FieldList;
 use SilverStripe\Forms\LiteralField;
+use SilverStripe\Forms\ReadonlyField;
 use SilverStripe\Forms\Tab;
 use SilverStripe\ORM\DataExtension;
-use SilverStripe\ORM\ValidationException;
-use SilverStripe\ORM\ValidationResult;
 use SilverStripe\Security\Member;
 
 /**
  * Class \Firesphere\HaveIBeenPwnd\Extensions\MemberExtension
  *
  * @property Member|MemberExtension $owner
- * @property boolean $PasswordIsPwnd
+ * @property int $PasswordIsPwnd
  * @property string $BreachedSites
  */
 class MemberExtension extends DataExtension
@@ -35,64 +34,30 @@ class MemberExtension extends DataExtension
     const USER_AGENT = 'SilverStripe-Firesphere-HaveIBeenPwnd-checker';
 
     private static $db = [
-        'PasswordIsPwnd' => 'Boolean(false)',
+        'PasswordIsPwnd' => 'Int',
         'BreachedSites'  => 'Text'
     ];
 
     public function updateCMSFields(FieldList $fields)
     {
-        $fields->removeByName(['BreachedSites']);
-        if ($this->owner->PasswordIsPwnd) {
-            $text = _t(static::class . 'PWNDHelp', '<b>Help, when I try to update a password, I get an error!</b><br />
-        If the error says that you "have been Pwnd", it means your password appears in the <a href="https://haveibeenpwned.com/Privacy">Have I Been Pwnd</a> database.
-        Therefore, we can not accept your password, because it is insecure or known to have been breached.<br />
+        $fields->removeByName(['BreachedSites', 'PasswordIsPwnd']);
+        if ($this->owner->PasswordIsPwnd > 0) {
+            $text = _t(static::class . '.PWNDHelp', 'If the error says that you "have been Pwnd", it means your password appears in the <a href="https://haveibeenpwned.com/Privacy">Have I Been Pwnd</a> database.
+        Therefore, we can not accept your password, because it is insecure or known to have been breached.
         Before a password is safely stored in our database, we test if the password has been breached. We do not share your password.
         We run a safe test against the HaveIBeenPwnd database to. None of your data is shared or stored at HaveIBeenPwnd.
-        For more information, you can read up on "Password safety", and we strongly recommend installing a password manager if you haven\'t already.<br />
+        For more information, you can read up on "Password safety", and we strongly recommend installing a password manager if you haven\'t already.
         Several options are LastPass, BitWarden and 1Password. These services are also able to test your passwords against the HaveIBeenPwnd database,
         to see if your passwords are secure and safe.<br />
         Furthermore, <a href="https://www.troyhunt.com/introducing-306-million-freely-downloadable-pwned-passwords/">Troy Hunt explains why and how this service is important</a>.');
 
-            $tab = Tab::create('HaveIBeenPwnd', 'Have I Been Pwnd?');
-            $fields->add($tab);
+            $fields->findOrMakeTab('Root.HaveIBeenPwnd', _t(static::class . '.PWNDTAB', 'Have I Been Pwnd?'));
             $help = LiteralField::create('Helptext', '<p>' . $text . '</p>');
             $fields->addFieldToTab('Root.HaveIBeenPwnd', $help);
         }
-    }
 
-    /**
-     * @param $pwd
-     * @param ValidationResult $valid
-     * @return void
-     * @throws ValidationException
-     * @throws \GuzzleHttp\Exception\GuzzleException
-     */
-    public function onBeforeChangePassword($pwd, $valid)
-    {
-        $allowBreach = static::config()->get('allow_pwnd');
-        $breachCount = static::config()->get('pwn_treshold');
-        $storeBreach = static::config()->get('save_pwnd');
-        $breached = '';
-        $isPwndCount = $this->checkPassword($pwd);
-
-        if ($isPwndCount > 0) {
-            usleep(1500); // We need to conform to the FUP, max 1 request per 1500ms
-            // Always mark as Pwnd if it's true
-            $this->owner->PasswordIsPwnd = true;
-            $breached = $this->checkEmail($valid);
-        }
-
-        if ($breached !== '' && $storeBreach) {
-            $this->owner->BreachedSites = $breached;
-        }
-
-        // Although it would be stupid, the pwnd treshold can be disabled
-        // Or even allow for breached passwords. Not exactly ideal either
-        if (!$allowBreach || ($isPwndCount > $breachCount && $breachCount !== 0)) {
-            $valid->addError(_t(static::class . 'KNOWN', 'Your password appears in the Have I Been Pwnd database'));
-            $valid->addError($breached);
-            throw new ValidationException($valid, 255);
-        }
+        $fields->addFieldToTab('Root.Main', $countField = ReadonlyField::create('PasswordIsPwnd', 'Pwnd Count'));
+        $countField->setDescription(_t(static::class . '.AMOUNT', 'Amount of times the password appears in the Have I Been Pwnd database'));
     }
 
     /**
@@ -100,7 +65,7 @@ class MemberExtension extends DataExtension
      * @return int
      * @throws \GuzzleHttp\Exception\GuzzleException
      */
-    public function checkPassword($pwd)
+    public function checkPwndPassword($pwd)
     {
         $sha = sha1($pwd);
         $shaStart = substr($sha, 0, 5);
@@ -122,7 +87,7 @@ class MemberExtension extends DataExtension
      * @return string
      * @throws \GuzzleHttp\Exception\GuzzleException
      */
-    public function checkEmail()
+    public function checkPwndEmail()
     {
         $uniqueField = Member::config()->get('unique_identifier_field');
         $account = $this->owner->{$uniqueField};

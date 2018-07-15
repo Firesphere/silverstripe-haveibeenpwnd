@@ -1,7 +1,7 @@
 ---
 name: HaveIBeenPwnd
 ---
-Firesphere\HaveIBeenPwnd\Extensions\MemberExtension:
-  allow_pwnd: false
+Firesphere\HaveIBeenPwnd\Extensions\PasswordValidatorExtension:
+  allow_pwnd: true
   save_pwnd: false
-  pwn_treshold: 10
+  pwn_treshold: 0

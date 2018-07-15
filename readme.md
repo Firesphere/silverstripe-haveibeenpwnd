@@ -16,7 +16,7 @@ Only a count of the amount of times the password shows in the database is collec
 name: MyPwnConfig
     after: HaveIBeenPwnd
 ---
-Firesphere\HaveIBeenPwnd\Extensions\MemberExtension:
+Firesphere\HaveIBeenPwnd\Extensions\PasswordValidatorExtension:
   allow_pwnd: false
   save_pwnd: false
   pwn_treshold: 10

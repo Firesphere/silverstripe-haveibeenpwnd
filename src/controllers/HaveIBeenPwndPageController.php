@@ -30,7 +30,7 @@ class HaveIBeenPwndPageController extends PageController
         $user = Security::getCurrentUser();
 
         if ($user) {
-            $breachedEmails = $user->checkEmail();
+            $breachedEmails = $user->checkPwndEmail();
 
             $contentText = str_replace("\r\n", '<br />', $breachedEmails);
 
