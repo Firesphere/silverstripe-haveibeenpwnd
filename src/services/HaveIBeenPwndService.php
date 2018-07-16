@@ -132,4 +132,20 @@ class HaveIBeenPwndService
 
         return '';
     }
+
+    /**
+     * @return array
+     */
+    public function getArgs()
+    {
+        return $this->args;
+    }
+
+    /**
+     * @param array $args
+     */
+    public function setArgs($args)
+    {
+        $this->args = $args;
+    }
 }

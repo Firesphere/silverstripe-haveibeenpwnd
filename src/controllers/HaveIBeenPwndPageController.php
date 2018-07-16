@@ -5,6 +5,7 @@ namespace Firesphere\HaveIBeenPwnd\Controllers;
 use Firesphere\HaveIBeenPwnd\Services\HaveIBeenPwndService;
 use PageController;
 use SilverStripe\Core\Injector\Injector;
+use SilverStripe\Dev\Debug;
 use SilverStripe\Security\Member;
 use SilverStripe\Security\Security;
 
@@ -24,21 +25,24 @@ class HaveIBeenPwndPageController extends PageController
 
 
     /**
+     * @param array $params
      * @return $this
      * @throws \GuzzleHttp\Exception\GuzzleException
      */
-    public function checkEmail()
+    public function checkEmail(array $params = [])
     {
         /** @var Member|null $user */
         $user = Security::getCurrentUser();
 
         if ($user) {
             /** @var HaveIBeenPwndService $service */
-            $service = Injector::inst()->get(HaveIBeenPwndService::class);
+            $service = Injector::inst()->createWithArgs(HaveIBeenPwndService::class, [$params]);
+            Debug::dump($service->getArgs());
             $breachedEmails = $service->checkPwndEmail($user);
 
             $contentText = str_replace("\r\n", '<br />', $breachedEmails);
 
+            Debug::dump($breachedEmails);
             $this->dataRecord->Content .= '<p>' . $contentText . '</p>';
         }
 
