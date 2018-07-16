@@ -16,12 +16,10 @@ class HaveIBeenPwndPageController extends PageController
 {
     private static $allowed_actions = [
         'checkEmail',
-        'checkPassword'
     ];
 
     private static $url_handlers = [
         'check-email'    => 'checkEmail',
-        'check-password' => 'checkPassword'
     ];
 
 

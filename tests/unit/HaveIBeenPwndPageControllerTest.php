@@ -9,32 +9,30 @@ use SilverStripe\Dev\SapphireTest;
 use SilverStripe\Security\IdentityStore;
 use SilverStripe\Security\Security;
 
-if (class_exists(HaveIBeenPwndPageController::class)) {
-    class HaveIBeenPwndPageControllerTest extends SapphireTest
+class HaveIBeenPwndPageControllerTest extends SapphireTest
+{
+    public function testClassExists()
     {
-        public function testClassExists()
-        {
-            $page = Injector::inst()->get(HaveIBeenPwndPage::class);
+        $page = Injector::inst()->get(HaveIBeenPwndPage::class);
 
-            $controller = Injector::inst()->get(HaveIBeenPwndPageController::class, $page);
+        $controller = Injector::inst()->get(HaveIBeenPwndPageController::class, $page);
 
-            $this->assertInstanceOf(HaveIBeenPwndPageController::class, $controller);
-        }
+        $this->assertInstanceOf(HaveIBeenPwndPageController::class, $controller);
+    }
 
-        public function testCheckEmail()
-        {
-            $page = Injector::inst()->get(HaveIBeenPwndPage::class);
+    public function testCheckEmail()
+    {
+        $page = Injector::inst()->get(HaveIBeenPwndPage::class);
 
-            $controller = Injector::inst()->get(HaveIBeenPwndPageController::class, $page);
+        $controller = Injector::inst()->get(HaveIBeenPwndPageController::class, $page);
 
-            // Log out. Solidly I hope
-            Security::setCurrentUser(null);
-            Injector::inst()->get(IdentityStore::class)->logOut();
+        // Log out. Solidly I hope
+        Security::setCurrentUser(null);
+        Injector::inst()->get(IdentityStore::class)->logOut();
 
-            $response = $controller->checkEmail();
+        $response = $controller->checkEmail();
 
-            // If there's no user, it should just return itself
-            $this->assertInstanceOf(HaveIBeenPwndPageController::class, $response);
-        }
+        // If there's no user, it should just return itself
+        $this->assertInstanceOf(HaveIBeenPwndPageController::class, $response);
     }
 }
