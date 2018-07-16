@@ -11,7 +11,6 @@ use SilverStripe\Security\Member;
 
 class HaveIBeenPwndServiceTest extends SapphireTest
 {
-
     protected $member;
 
     public function testCheckPwndPassword()
@@ -51,8 +50,10 @@ class HaveIBeenPwndServiceTest extends SapphireTest
 
         $response = $service->checkPwndEmail($this->member);
 
-        $this->assertContains('To help you identify where you have been breached, your username or email address appears in the following breaches:',
-            $response);
+        $this->assertContains(
+            'To help you identify where you have been breached, your username or email address appears in the following breaches:',
+            $response
+        );
         $this->member->Email = 'nonexisting@realy-i-do-not-exist.random';
 
         $response = $service->checkPwndEmail($this->member);

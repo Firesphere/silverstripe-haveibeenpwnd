@@ -8,7 +8,6 @@
 
 namespace Firesphere\HaveIBeenPwnd\Services;
 
-
 use GuzzleHttp\Client;
 use GuzzleHttp\Exception\GuzzleException;
 use Psr\Http\Message\ResponseInterface;

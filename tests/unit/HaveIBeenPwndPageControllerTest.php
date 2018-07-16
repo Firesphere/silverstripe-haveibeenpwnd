@@ -10,7 +10,6 @@ use SilverStripe\Security\IdentityStore;
 use SilverStripe\Security\Security;
 
 if (class_exists(HaveIBeenPwndPageController::class)) {
-
     class HaveIBeenPwndPageControllerTest extends SapphireTest
     {
         public function testClassExists()
