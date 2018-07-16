@@ -20,7 +20,7 @@ class HaveIBeenPwndPageController extends PageController
     ];
 
     private static $url_handlers = [
-        'check-email'    => 'checkEmail',
+        'check-email' => 'checkEmail',
     ];
 
 
@@ -37,12 +37,11 @@ class HaveIBeenPwndPageController extends PageController
         if ($user) {
             /** @var HaveIBeenPwndService $service */
             $service = Injector::inst()->createWithArgs(HaveIBeenPwndService::class, [$params]);
-            Debug::dump($service->getArgs());
+
             $breachedEmails = $service->checkPwndEmail($user);
 
             $contentText = str_replace("\r\n", '<br />', $breachedEmails);
 
-            Debug::dump($breachedEmails);
             $this->dataRecord->Content .= '<p>' . $contentText . '</p>';
         }
 

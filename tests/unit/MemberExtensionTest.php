@@ -2,6 +2,7 @@
 
 namespace Firesphere\HaveIBeenPwnd\Tests;
 
+use SilverStripe\Dev\Debug;
 use SilverStripe\Dev\SapphireTest;
 use SilverStripe\Forms\ReadonlyField;
 use SilverStripe\Security\Member;
@@ -18,6 +19,7 @@ class MemberExtensionTest extends SapphireTest
         $fields = $this->member->getCMSFields();
 
         $this->assertInstanceOf(ReadonlyField::class, $fields->dataFieldByName('PasswordIsPwnd'));
+        $this->assertNotContains('If the error says that you "have been Pwnd", ', $fields->forTemplate());
 
         $this->member->BreachedSites = '000error, test';
 
@@ -25,6 +27,8 @@ class MemberExtensionTest extends SapphireTest
 
         $this->assertInstanceOf(ReadonlyField::class, $fields->dataFieldByName('BreachedSites'));
         $this->assertTrue($fields->hasTabSet('HaveIBeenPwnd'));
+
+        $this->assertContains('Breached sites', $fields->forTemplate());
     }
 
     protected function setUp()
