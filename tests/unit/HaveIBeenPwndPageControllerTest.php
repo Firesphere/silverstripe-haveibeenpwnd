@@ -4,7 +4,6 @@ namespace Firesphere\HaveIBeenPwnd\Tests;
 
 use Firesphere\HaveIBeenPwnd\Controllers\HaveIBeenPwndPageController;
 use Firesphere\HaveIBeenPwnd\Models\HaveIBeenPwndPage;
-use GuzzleHttp\Client;
 use GuzzleHttp\Handler\MockHandler;
 use GuzzleHttp\Psr7\Response;
 use SilverStripe\Core\Injector\Injector;

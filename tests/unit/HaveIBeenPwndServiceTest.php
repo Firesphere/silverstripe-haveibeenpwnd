@@ -13,6 +13,16 @@ class HaveIBeenPwndServiceTest extends SapphireTest
 {
     protected $member;
 
+    public function testGetSetArgs()
+    {
+        $args = ['test' => 'testing'];
+        $service = Injector::inst()->create(HaveIBeenPwndService::class);
+
+        $service->setArgs($args);
+
+        $this->assertEquals($args, $service->getArgs());
+    }
+    
     public function testCheckPwndPassword()
     {
         $body = file_get_contents(__DIR__ . '/../fixtures/pwnd123.txt');
