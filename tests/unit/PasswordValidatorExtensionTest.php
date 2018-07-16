@@ -32,6 +32,7 @@ class PasswordValidatorExtensionTest extends SapphireTest
         Config::modify()->set(PasswordValidatorExtension::class, 'allow_pwnd', true);
         Config::modify()->set(PasswordValidatorExtension::class, 'pwn_treshold', 0);
         Config::modify()->set(PasswordValidatorExtension::class, 'save_pwnd', false);
+
         return parent::setUp();
     }
 }

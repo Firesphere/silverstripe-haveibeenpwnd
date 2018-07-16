@@ -5,7 +5,6 @@ namespace Firesphere\HaveIBeenPwnd\Tests;
 use Firesphere\HaveIBeenPwnd\Controllers\HaveIBeenPwndPageController;
 use Firesphere\HaveIBeenPwnd\Models\HaveIBeenPwndPage;
 use SilverStripe\Core\Injector\Injector;
-use SilverStripe\Dev\Debug;
 use SilverStripe\Dev\SapphireTest;
 use SilverStripe\Security\IdentityStore;
 use SilverStripe\Security\Security;
@@ -34,8 +33,6 @@ if (class_exists(HaveIBeenPwndPageController::class)) {
             Injector::inst()->get(IdentityStore::class)->logOut();
 
             $response = $controller->checkEmail();
-
-            Debug::dump($response);
 
             // If there's no user, it should just return itself
             $this->assertInstanceOf(HaveIBeenPwndPageController::class, $response);
