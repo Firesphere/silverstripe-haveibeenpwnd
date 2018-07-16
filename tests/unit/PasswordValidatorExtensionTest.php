@@ -16,7 +16,11 @@ class PasswordValidatorExtensionTest extends SapphireTest
         /** @var PasswordValidatorExtension $extension */
         $extension = Injector::inst()->get(PasswordValidatorExtension::class);
 
-        $extension->updateValidatePassword('donotcare', $member = Member::create(), $valid = ValidationResult::create());
+        /** @var Member $member */
+        $member = Member::create();
+        /** @var ValidationResult $valid */
+        $valid = ValidationResult::create();
+        $extension->updateValidatePassword('donotcare', $member, $valid);
 
         $this->assertTrue($valid->isValid());
         $this->assertEquals(0, $member->PasswordIsPwnd);
@@ -25,9 +29,9 @@ class PasswordValidatorExtensionTest extends SapphireTest
 
     protected function setUp()
     {
-        Config::modify(PasswordValidatorExtension::class, 'allow_pwnd', true);
-        Config::modify(PasswordValidatorExtension::class, 'pwn_treshold', 0);
-        Config::modify(PasswordValidatorExtension::class, 'save_pwnd', false);
+        Config::modify()->set(PasswordValidatorExtension::class, 'allow_pwnd', true);
+        Config::modify()->set(PasswordValidatorExtension::class, 'pwn_treshold', 0);
+        Config::modify()->set(PasswordValidatorExtension::class, 'save_pwnd', false);
         return parent::setUp();
     }
 }

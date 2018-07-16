@@ -7,6 +7,7 @@ use Psr\Http\Message\ResponseInterface;
 use SilverStripe\Core\Config\Configurable;
 use SilverStripe\Core\Convert;
 use SilverStripe\Core\Injector\Injector;
+use SilverStripe\Dev\Debug;
 use SilverStripe\Forms\FieldList;
 use SilverStripe\Forms\LiteralField;
 use SilverStripe\Forms\ReadonlyField;
@@ -34,13 +35,16 @@ class MemberExtension extends DataExtension
 
     const API_VERSION = '2';
 
-    const USER_AGENT = 'SilverStripe-Firesphere-HaveIBeenPwnd-checker';
+    const USER_AGENT = 'SilverStripe-Firesphere-HaveIBeenPwnd-checker/1.0';
 
     private static $db = [
         'PasswordIsPwnd' => 'Int',
         'BreachedSites'  => 'Text'
     ];
 
+    /**
+     * @param FieldList $fields
+     */
     public function updateCMSFields(FieldList $fields)
     {
         $fields->removeByName(['BreachedSites', 'PasswordIsPwnd']);
@@ -73,16 +77,19 @@ class MemberExtension extends DataExtension
 
     /**
      * @param $pwd
+     * @param array $params
      * @return int
+     * @throws \GuzzleHttp\Exception\GuzzleException
      */
-    public function checkPwndPassword($pwd)
+    public function checkPwndPassword($pwd, $params = [])
     {
+        $params['base_uri'] = static::PWND_API_URL;
+
         $sha = sha1($pwd);
         $shaStart = substr($sha, 0, 5);
         $shaEnd = substr($sha, 5);
-        $client = Injector::inst()->createWithArgs(Client::class, [[
-            'base_uri' => static::PWND_API_URL
-        ]]);
+        /** @var Client $client */
+        $client = Injector::inst()->createWithArgs(Client::class, [$params]);
         $result = $client->request('GET', 'range/' . $shaStart, [
             'headers' => [
                 'user-agent'  => static::USER_AGENT,
@@ -107,6 +114,7 @@ class MemberExtension extends DataExtension
             list($suffix, $pwnCount) = explode(':', $suffix);
             if ($suffix === $shaEnd) {
                 $count += (int)$pwnCount;
+                break;
             }
         }
 
@@ -114,17 +122,18 @@ class MemberExtension extends DataExtension
     }
 
     /**
+     * @param array $params
      * @return string
      * @throws \GuzzleHttp\Exception\GuzzleException
      */
-    public function checkPwndEmail()
+    public function checkPwndEmail($params = [])
     {
+        $params['base_uri'] = static::PWND_URL;
         $uniqueField = Member::config()->get('unique_identifier_field');
         $account = $this->owner->{$uniqueField};
 
-        $client = Injector::inst()->createWithArgs(Client::class, [[
-            'base_uri' => static::PWND_URL
-        ]]);
+        /** @var Client $client */
+        $client = Injector::inst()->createWithArgs(Client::class, [$params]);
 
         $result = $client->request('GET', 'breachedaccount/' . $account . '?truncateResponse=true', [
             'headers' => [
@@ -158,6 +167,10 @@ class MemberExtension extends DataExtension
             }
         }
 
-        return $message . ' ' . implode(', ', $sites);
+        if (count($sites)) {
+            return $message . ' ' . implode(', ', $sites);
+        }
+
+        return '';
     }
 }

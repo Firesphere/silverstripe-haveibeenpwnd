@@ -11,3 +11,4 @@ install-frameworkmissing.html
 /assets
 /resources
 /public
+.php_cs.cache

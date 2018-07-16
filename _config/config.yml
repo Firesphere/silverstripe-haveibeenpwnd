@@ -2,6 +2,6 @@
 name: HaveIBeenPwnd
 ---
 Firesphere\HaveIBeenPwnd\Extensions\PasswordValidatorExtension:
-  allow_pwnd: true
-  save_pwnd: false
+  allow_pwnd: false
+  save_pwnd: true
   pwn_treshold: 0

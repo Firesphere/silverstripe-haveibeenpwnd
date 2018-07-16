@@ -49,7 +49,7 @@ class PasswordValidatorExtension extends Extension
 
         // If storing the breached sites, check the email as well
         if ($storeBreach) {
-            $breached = $member->checkPwndEmail($valid);
+            $breached = $member->checkPwndEmail();
             $member->BreachedSites = $breached;
         }
 
