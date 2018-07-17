@@ -2,7 +2,6 @@
 
 namespace Firesphere\HaveIBeenPwnd\Tests;
 
-
 use Firesphere\HaveIBeenPwnd\Controllers\LoginHandler;
 use Firesphere\HaveIBeenPwnd\Extensions\PasswordValidatorExtension;
 use Firesphere\HaveIBeenPwnd\Services\HaveIBeenPwndService;
@@ -30,7 +29,6 @@ class LoginHandlerTest extends SapphireTest
 
     public function testInstantiate()
     {
-
         $this->assertInstanceOf(LoginHandler::class, $this->handler);
         $this->assertNotSame(BaseLoginHandler::class, get_class($this->handler));
 

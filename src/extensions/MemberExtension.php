@@ -45,8 +45,10 @@ class MemberExtension extends DataExtension
 
         if ($this->owner->BreachedSites) {
             $fields->findOrMakeTab('Root.HaveIBeenPwnd', _t(static::class . '.PWNDTAB', 'Have I Been Pwnd?'));
-            $fields->addFieldToTab('Root.HaveIBeenPwnd',
-                ReadonlyField::create('BreachedSites', _t(static::class . '.BREACHEDSITES', 'Breached sites')));
+            $fields->addFieldToTab(
+                'Root.HaveIBeenPwnd',
+                ReadonlyField::create('BreachedSites', _t(static::class . '.BREACHEDSITES', 'Breached sites'))
+            );
         }
 
         $fields->addFieldToTab('Root.Main', $countField = ReadonlyField::create('PasswordIsPwnd', 'Pwnd Count'));

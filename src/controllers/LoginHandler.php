@@ -2,7 +2,6 @@
 
 namespace Firesphere\HaveIBeenPwnd\Controllers;
 
-
 use Firesphere\HaveIBeenPwnd\Models\HaveIBeenPwndPage;
 use Firesphere\HaveIBeenPwnd\Services\HaveIBeenPwndService;
 use SilverStripe\Control\Director;
@@ -10,7 +9,6 @@ use SilverStripe\Control\HTTPRequest;
 use SilverStripe\Control\HTTPResponse;
 use SilverStripe\Core\Injector\Injector;
 use SilverStripe\Security\Authenticator;
-use SilverStripe\Security\IdentityStore;
 use SilverStripe\Security\Member;
 use SilverStripe\Security\MemberAuthenticator\LoginHandler as BaseLoginHandler;
 use SilverStripe\Security\MemberAuthenticator\LostPasswordForm;
@@ -45,7 +43,7 @@ class LoginHandler extends BaseLoginHandler
      */
     public function doLogin($data, MemberLoginForm $form, HTTPRequest $request)
     {
-//        if (Director::isLive()) {
+        if (Director::isLive()) {
             /** @var HTTPRequest $request */
 
             $password = $data['Password'];
@@ -57,7 +55,7 @@ class LoginHandler extends BaseLoginHandler
 
                 return $this->redirectToResetPassword();
             }
-//        }
+        }
 
         return parent::doLogin($data, $form, $request);
     }
@@ -91,17 +89,21 @@ class LoginHandler extends BaseLoginHandler
 
         $pwndPage = HaveIBeenPwndPage::get()->first();
         $cp->sessionMessage(
-            _t(static::class . '.PASSWORDEXPIREDORBREACHED',
+            _t(
+                static::class . '.PASSWORDEXPIREDORBREACHED',
                 'Because of security concerns with the password you entered, you need to reset your password. 
-                Do not worry, your account has not been compromised, this is just a precaution'),
+                Do not worry, your account has not been compromised, this is just a precaution'
+            ),
             'warning'
         );
 
         if ($pwndPage) {
             $cp->sessionMessage(
-                _t(static::class . '.PASSWORDEXPIRYREASON',
+                _t(
+                    static::class . '.PASSWORDEXPIRYREASON',
                     '<a href="{link}">You can read more here</a>',
-                    ['link' => $pwndPage->Link()]),
+                    ['link' => $pwndPage->Link()]
+                ),
                 'good'
             );
         }
