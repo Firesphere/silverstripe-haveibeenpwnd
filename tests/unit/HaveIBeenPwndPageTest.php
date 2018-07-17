@@ -11,7 +11,6 @@ namespace Firesphere\HaveIBeenPwnd\Tests;
 use Firesphere\HaveIBeenPwnd\Controllers\HaveIBeenPwndPageController;
 use Firesphere\HaveIBeenPwnd\Models\HaveIBeenPwndPage;
 use SilverStripe\Core\Injector\Injector;
-use SilverStripe\Dev\Debug;
 use SilverStripe\Dev\SapphireTest;
 use SilverStripe\Security\DefaultAdminService;
 use SilverStripe\Security\Security;

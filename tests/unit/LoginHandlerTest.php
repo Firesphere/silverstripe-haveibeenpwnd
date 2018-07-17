@@ -3,15 +3,9 @@
 namespace Firesphere\HaveIBeenPwnd\Tests;
 
 use Firesphere\HaveIBeenPwnd\Controllers\LoginHandler;
-use Firesphere\HaveIBeenPwnd\Extensions\PasswordValidatorExtension;
 use Firesphere\HaveIBeenPwnd\Services\HaveIBeenPwndService;
-use GuzzleHttp\Handler\MockHandler;
-use GuzzleHttp\Psr7\Response;
-use SilverStripe\Control\HTTPRequest;
 use SilverStripe\Core\Injector\Injector;
 use SilverStripe\Dev\SapphireTest;
-use SilverStripe\Security\LoginForm;
-use SilverStripe\Security\Member;
 use SilverStripe\Security\MemberAuthenticator\LoginHandler as BaseLoginHandler;
 use SilverStripe\Security\MemberAuthenticator\MemberAuthenticator;
 

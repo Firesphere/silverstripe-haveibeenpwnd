@@ -8,6 +8,7 @@ use SilverStripe\Control\Director;
 use SilverStripe\Control\HTTPRequest;
 use SilverStripe\Control\HTTPResponse;
 use SilverStripe\Core\Injector\Injector;
+use SilverStripe\ORM\ValidationResult;
 use SilverStripe\Security\Authenticator;
 use SilverStripe\Security\Member;
 use SilverStripe\Security\MemberAuthenticator\LoginHandler as BaseLoginHandler;
@@ -43,17 +44,27 @@ class LoginHandler extends BaseLoginHandler
      */
     public function doLogin($data, MemberLoginForm $form, HTTPRequest $request)
     {
-        if (Director::isLive()) {
-            /** @var HTTPRequest $request */
+        $failureMessage = null;
 
-            $password = $data['Password'];
+        $this->extend('beforeLogin');
+        // Successful login
+        /** @var ValidationResult $result */
+        if ($member = $this->checkLogin($data, $request, $result)) {
 
-            $breachCount = $this->service->checkPwndPassword($password);
+            // This is a copy-paste, because we only want to step in if the login itself is successful
+            // We do not want to lock the member out immediately if the password is incorrect anyway
+            // Due to a lack of a `return` option in the current extension, we need to have this copy-paste
+            // before handing over to the parent
+            if ($member instanceof Member && Director::isLive()) { // Only do this on live environments. Test and Dev should be allowed, saves the engineer a lot of hassle
+                $password = $data['Password'];
 
-            if ($breachCount) {
-                $this->lockoutMember($data, $breachCount);
+                $breachCount = $this->service->checkPwndPassword($password);
 
-                return $this->redirectToResetPassword();
+                if ($breachCount) {
+                    $this->lockoutMember($data, $breachCount);
+
+                    return $this->redirectToResetPassword();
+                }
             }
         }
 
