@@ -10,6 +10,8 @@ jobs:
           - SS_DATABASE_PASSWORD=ubuntu
           - SS_DATABASE_NAME=circle_test
           - SS_ENVIRONMENT_TYPE=test
+          - SS_DEFAULT_ADMIN_USERNAME=admin
+          - SS_DEFAULT_ADMIN_PASSWORD=password
       - image: circleci/mysql:5.7
         environment:
           - MYSQL_USER=root

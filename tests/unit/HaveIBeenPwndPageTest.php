@@ -30,6 +30,7 @@ class HaveIBeenPwndPageTest extends SapphireTest
     {
         $member = Injector::inst()->get(DefaultAdminService::class)->findOrCreateDefaultAdmin();
         Security::setCurrentUser($member);
+
         if (HaveIBeenPwndPage::get()->count()) {
             HaveIBeenPwndPage::get()->removeAll();
         }
