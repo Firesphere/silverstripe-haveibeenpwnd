@@ -45,7 +45,7 @@ class LoginHandler extends BaseLoginHandler
      */
     public function doLogin($data, MemberLoginForm $form, HTTPRequest $request)
     {
-        if (Director::isLive()) {
+//        if (Director::isLive()) {
             /** @var HTTPRequest $request */
 
             $password = $data['Password'];
@@ -57,7 +57,7 @@ class LoginHandler extends BaseLoginHandler
 
                 return $this->redirectToResetPassword();
             }
-        }
+//        }
 
         return parent::doLogin($data, $form, $request);
     }
@@ -77,9 +77,6 @@ class LoginHandler extends BaseLoginHandler
         $member->PasswordExpiry = '1970-01-01 00:00:00'; // To the beginning of Unixtime it is
         $member->Password = null;
         $member->write();
-
-        // Log the member out as well
-        Injector::inst()->get(IdentityStore::class)->logOut();
     }
 
     /**
@@ -90,24 +87,13 @@ class LoginHandler extends BaseLoginHandler
      */
     protected function redirectToResetPassword()
     {
-        $this->setupResetMessages();
-
-        $resetPasswordLink = Security::singleton()->Link('lostpassword');
-
-        return $this->redirect($resetPasswordLink);
-    }
-
-    /**
-     * Set up messages on the Lost Password Form to inform the user of what's going on
-     */
-    protected function setupResetMessages()
-    {
         $cp = LostPasswordForm::create($this, Authenticator::class, 'lostPasswordForm');
 
         $pwndPage = HaveIBeenPwndPage::get()->first();
         $cp->sessionMessage(
             _t(static::class . '.PASSWORDEXPIREDORBREACHED',
-                'Because of security concerns with the password you entered, you need to reset your password.'),
+                'Because of security concerns with the password you entered, you need to reset your password. 
+                Do not worry, your account has not been compromised, this is just a precaution'),
             'warning'
         );
 
@@ -119,6 +105,9 @@ class LoginHandler extends BaseLoginHandler
                 'good'
             );
         }
+        $resetPasswordLink = Security::singleton()->Link('lostpassword');
+
+        return $this->redirect($resetPasswordLink);
     }
 
     /**
