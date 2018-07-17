@@ -33,13 +33,19 @@
         "autoload": {
             "psr-4": {
                 "Firesphere\\HaveIBeenPwnd\\": "src/",
-                "Firesphere\\HaveIBeenPwnd\\Extensions": "src/extensions"
+                "Firesphere\\HaveIBeenPwnd\\Extensions": "src/extensions",
+                "Firesphere\\HaveIBeenPwnd\\Controllers": "src/contrtollers",
+                "Firesphere\\HaveIBeenPwnd\\Models": "src/models",
+                "Firesphere\\HaveIBeenPwnd\\Services": "src/services"
             }
         },
         "autoload-dev": {
             "psr-4": {
                 "Firesphere\\HaveIBeenPwnd\\": "src/",
-                "Firesphere\\HaveIBeenPwnd\\Extensions": "src/extensions"
+                "Firesphere\\HaveIBeenPwnd\\Extensions": "src/extensions",
+                "Firesphere\\HaveIBeenPwnd\\Controllers": "src/contrtollers",
+                "Firesphere\\HaveIBeenPwnd\\Models": "src/models",
+                "Firesphere\\HaveIBeenPwnd\\Services": "src/services"
             }
         }
     },

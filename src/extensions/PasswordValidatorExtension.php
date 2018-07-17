@@ -19,17 +19,22 @@ class PasswordValidatorExtension extends Extension
 {
     use Configurable;
 
+    /**
+     * @var HaveIBeenPwndService
+     */
     protected $service;
 
     /**
      * @param string $pwd
      * @param Member $member
      * @param ValidationResult $valid
+     * @param array $params
      * @return void
+     * @throws \GuzzleHttp\Exception\GuzzleException
      */
-    public function updateValidatePassword($pwd, $member, $valid)
+    public function updateValidatePassword($pwd, $member, $valid, $params = [])
     {
-        $this->service = Injector::inst()->get(HaveIBeenPwndService::class);
+        $this->service = Injector::inst()->create(HaveIBeenPwndService::class, [$params]);
         $allowBreach = static::config()->get('allow_pwnd');
         $breachCount = static::config()->get('pwn_treshold');
         $storeBreach = static::config()->get('save_pwnd');

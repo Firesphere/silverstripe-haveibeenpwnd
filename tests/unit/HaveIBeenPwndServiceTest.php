@@ -22,7 +22,7 @@ class HaveIBeenPwndServiceTest extends SapphireTest
 
         $this->assertEquals($args, $service->getArgs());
     }
-    
+
     public function testCheckPwndPassword()
     {
         $body = file_get_contents(__DIR__ . '/../fixtures/pwnd123.txt');

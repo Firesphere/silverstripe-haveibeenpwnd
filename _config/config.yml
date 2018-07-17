@@ -5,3 +5,6 @@ Firesphere\HaveIBeenPwnd\Extensions\PasswordValidatorExtension:
   allow_pwnd: false
   save_pwnd: true
   pwn_treshold: 0
+SilverStripe\Core\Injector\Injector:
+  SilverStripe\Security\MemberAuthenticator\LoginHandler:
+    class: Firesphere\HaveIBeenPwnd\Controllers\LoginHandler

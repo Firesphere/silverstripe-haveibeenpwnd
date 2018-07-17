@@ -11,7 +11,7 @@ use SilverStripe\Security\Member;
 
 class PasswordValidatorExtensionTest extends SapphireTest
 {
-    public function testUpdateValidatePassword()
+    public function testUpdateValidatePasswordAllowAll()
     {
         /** @var PasswordValidatorExtension $extension */
         $extension = Injector::inst()->get(PasswordValidatorExtension::class);

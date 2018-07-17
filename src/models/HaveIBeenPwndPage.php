@@ -22,4 +22,14 @@ class HaveIBeenPwndPage extends Page
     {
         return HaveIBeenPwndPageController::class;
     }
+
+    public function canCreate($member = null, $context = array())
+    {
+        // This page should only exist once
+        if (static::get()->count()) {
+            return false;
+        }
+
+        return parent::canCreate($member, $context);
+    }
 }

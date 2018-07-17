@@ -5,7 +5,6 @@ namespace Firesphere\HaveIBeenPwnd\Controllers;
 use Firesphere\HaveIBeenPwnd\Services\HaveIBeenPwndService;
 use PageController;
 use SilverStripe\Core\Injector\Injector;
-use SilverStripe\Dev\Debug;
 use SilverStripe\Security\Member;
 use SilverStripe\Security\Security;
 

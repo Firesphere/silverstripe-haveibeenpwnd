@@ -1,10 +1,4 @@
 <?php
-/**
- * Created by PhpStorm.
- * User: simon
- * Date: 16-Jul-18
- * Time: 19:38
- */
 
 namespace Firesphere\HaveIBeenPwnd\Services;
 
