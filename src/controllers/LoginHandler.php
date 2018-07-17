@@ -50,7 +50,6 @@ class LoginHandler extends BaseLoginHandler
         // Successful login
         /** @var ValidationResult $result */
         if ($member = $this->checkLogin($data, $request, $result)) {
-
             // This is a copy-paste, because we only want to step in if the login itself is successful
             // We do not want to lock the member out immediately if the password is incorrect anyway
             // Due to a lack of a `return` option in the current extension, we need to have this copy-paste
