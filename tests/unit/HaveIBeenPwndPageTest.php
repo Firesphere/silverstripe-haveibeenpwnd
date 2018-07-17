@@ -11,8 +11,10 @@ namespace Firesphere\HaveIBeenPwnd\Tests;
 use Firesphere\HaveIBeenPwnd\Controllers\HaveIBeenPwndPageController;
 use Firesphere\HaveIBeenPwnd\Models\HaveIBeenPwndPage;
 use SilverStripe\Core\Injector\Injector;
+use SilverStripe\Dev\Debug;
 use SilverStripe\Dev\SapphireTest;
 use SilverStripe\Security\DefaultAdminService;
+use SilverStripe\Security\Security;
 
 class HaveIBeenPwndPageTest extends SapphireTest
 {
@@ -26,10 +28,14 @@ class HaveIBeenPwndPageTest extends SapphireTest
 
     public function testCanCreate()
     {
-        $page = HaveIBeenPwndPage::create(['AuthorID' => 1]);
-
         $member = Injector::inst()->get(DefaultAdminService::class)->findOrCreateDefaultAdmin();
-        
+        Security::setCurrentUser($member);
+        if (HaveIBeenPwndPage::get()->count()) {
+            HaveIBeenPwndPage::get()->removeAll();
+        }
+
+        $page = HaveIBeenPwndPage::create();
+
         $this->assertTrue($page->canCreate($member));
 
         $page->write();
