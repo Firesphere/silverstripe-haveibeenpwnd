@@ -19,6 +19,7 @@ class MemberExtensionTest extends SapphireTest
 
         $this->assertInstanceOf(ReadonlyField::class, $fields->dataFieldByName('PasswordIsPwnd'));
         $this->assertNotContains('If the error says that you "have been Pwnd", ', $fields->forTemplate());
+        $this->assertFalse($fields->hasTabSet('HaveIBeenPwnd'));
 
         $this->member->BreachedSites = '000error, test';
 
@@ -28,6 +29,7 @@ class MemberExtensionTest extends SapphireTest
         $this->assertTrue($fields->hasTabSet('HaveIBeenPwnd'));
 
         $this->assertContains('Breached sites', $fields->forTemplate());
+        $this->assertContains('If the error says that you "have been Pwnd", ', $fields->forTemplate());
     }
 
     protected function setUp()
