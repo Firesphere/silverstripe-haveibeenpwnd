@@ -37,6 +37,11 @@ class LoginHandlerTest extends SapphireTest
         $this->assertInstanceOf(HaveIBeenPwndService::class, $this->handler->getService());
     }
 
+    public function testDoLogin()
+    {
+
+    }
+
     protected function setUp()
     {
         $this->authenticator = Injector::inst()->get(MemberAuthenticator::class);

@@ -8,6 +8,7 @@ use Psr\Http\Message\ResponseInterface;
 use SilverStripe\Core\Config\Configurable;
 use SilverStripe\Core\Convert;
 use SilverStripe\Core\Injector\Injector;
+use SilverStripe\Dev\Debug;
 use SilverStripe\Security\Member;
 
 class HaveIBeenPwndService
@@ -50,6 +51,7 @@ class HaveIBeenPwndService
             ]
         ]);
 
+        Debug::dump($result->getStatusCode());
         return $this->checkList($result, $shaEnd);
     }
 

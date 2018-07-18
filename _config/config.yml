@@ -4,7 +4,7 @@ name: HaveIBeenPwnd
 Firesphere\HaveIBeenPwnd\Extensions\PasswordValidatorExtension:
   allow_pwnd: false
   save_pwnd: true
-  pwn_treshold: 0
+  pwn_treshold: 1
 SilverStripe\Core\Injector\Injector:
   SilverStripe\Security\MemberAuthenticator\LoginHandler:
     class: Firesphere\HaveIBeenPwnd\Controllers\LoginHandler
