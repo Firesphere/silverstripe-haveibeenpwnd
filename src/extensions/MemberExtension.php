@@ -28,6 +28,9 @@ class MemberExtension extends DataExtension
     public function updateCMSFields(FieldList $fields)
     {
         $fields->removeByName(['BreachedSites', 'PasswordIsPwnd']);
+        if ($this->owner->BreachedSites || $this->owner->PasswordIsPwnd) {
+            $fields->findOrMakeTab('Root.HaveIBeenPwnd', _t(static::class . '.PWNDTAB', 'Have I Been Pwnd?'));
+        }
         if ($this->owner->PasswordIsPwnd > 0) {
             $text = _t(static::class . '.PWNDHelp', 'If the error says that you "have been Pwnd", it means your password appears in the <a href="https://haveibeenpwned.com/Privacy">Have I Been Pwnd</a> database.
         Therefore, we can not accept your password, because it is insecure or known to have been breached.
@@ -38,13 +41,11 @@ class MemberExtension extends DataExtension
         to see if your passwords are secure and safe.<br />
         Furthermore, <a href="https://www.troyhunt.com/introducing-306-million-freely-downloadable-pwned-passwords/">Troy Hunt explains why and how this service is important</a>.');
 
-            $fields->findOrMakeTab('Root.HaveIBeenPwnd', _t(static::class . '.PWNDTAB', 'Have I Been Pwnd?'));
             $help = LiteralField::create('Helptext', '<p>' . $text . '</p>');
             $fields->addFieldToTab('Root.HaveIBeenPwnd', $help);
         }
 
         if ($this->owner->BreachedSites) {
-            $fields->findOrMakeTab('Root.HaveIBeenPwnd', _t(static::class . '.PWNDTAB', 'Have I Been Pwnd?'));
             $fields->addFieldToTab(
                 'Root.HaveIBeenPwnd',
                 ReadonlyField::create('BreachedSites', _t(static::class . '.BREACHEDSITES', 'Breached sites'))

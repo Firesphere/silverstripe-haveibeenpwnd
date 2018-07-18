@@ -3,6 +3,7 @@
 namespace Firesphere\HaveIBeenPwnd\Tests;
 
 use Firesphere\HaveIBeenPwnd\Controllers\LoginHandler;
+use Firesphere\HaveIBeenPwnd\Models\HaveIBeenPwndPage;
 use Firesphere\HaveIBeenPwnd\Services\HaveIBeenPwndService;
 use GuzzleHttp\Handler\MockHandler;
 use GuzzleHttp\Psr7\Response;
@@ -13,8 +14,11 @@ use SilverStripe\Core\Config\Config;
 use SilverStripe\Core\Injector\Injector;
 use SilverStripe\Dev\Debug;
 use SilverStripe\Dev\SapphireTest;
+use SilverStripe\Security\Authenticator;
+use SilverStripe\Security\IdentityStore;
 use SilverStripe\Security\Member;
 use SilverStripe\Security\MemberAuthenticator\LoginHandler as BaseLoginHandler;
+use SilverStripe\Security\MemberAuthenticator\LostPasswordForm;
 use SilverStripe\Security\MemberAuthenticator\MemberAuthenticator;
 use SilverStripe\Security\MemberAuthenticator\MemberLoginForm;
 
@@ -76,17 +80,24 @@ class LoginHandlerTest extends SapphireTest
 
         $this->assertEquals(302, $response->getStatusCode());
         $this->assertContains('lostpassword', $response->getHeader('location'));
+        Injector::inst()->get(IdentityStore::class)->logOut();
 
         $response = $this->handler->doLogin(['Email' => 'test@test.com', 'Password' => '12345678'], $form, $request);
 
         $this->assertEquals(302, $response->getStatusCode());
         $this->assertNotContains('lostpassword', $response->getHeader('location'));
+        $passwordForm = LostPasswordForm::create($this->handler, Authenticator::class, 'lostPasswordForm');
+
+        $this->assertContains('You can read more here', $passwordForm->getMessage());
+
     }
 
     protected function setUp()
     {
         Config::modify()->set(HaveIBeenPwndService::class, 'allow_pwnd', true);
         Config::modify()->set(HaveIBeenPwndService::class, 'save_pwnd', false);
+
+        HaveIBeenPwndPage::create(['Title' => 'I am pwnd'])->write();
 
         $member = Member::create(['Email' => 'test@test.com', 'Password' => '1234567890']);
         $this->memberId = $member->write();
@@ -100,6 +111,7 @@ class LoginHandlerTest extends SapphireTest
     protected function tearDown()
     {
         Member::get()->byID($this->memberId)->delete();
+        HaveIBeenPwndPage::get()->filter(['Title' => 'I am pwnd'])->first()->delete();
         parent::tearDown();
     }
 }
