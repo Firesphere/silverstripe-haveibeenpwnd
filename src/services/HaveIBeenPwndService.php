@@ -63,9 +63,9 @@ class HaveIBeenPwndService
     {
         $count = 0;
         $shaEnd = strtoupper($shaEnd);
-        $suffixes = explode("\r\n", $result->getBody());
+        $suffixes = explode("\n", $result->getBody());
         foreach ($suffixes as $suffix) {
-            list($suffix, $pwnCount) = explode(':', $suffix);
+            list($suffix, $pwnCount) = explode(':', trim($suffix));
             if ($suffix === $shaEnd) {
                 $count += (int)$pwnCount;
                 break;
