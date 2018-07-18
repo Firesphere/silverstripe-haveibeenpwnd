@@ -94,6 +94,7 @@ class LoginHandler extends BaseLoginHandler
     {
         $lostPasswordForm = LostPasswordForm::create($this, Authenticator::class, 'lostPasswordForm');
 
+        /** @var HaveIBeenPwndPage $pwndPage */
         $pwndPage = HaveIBeenPwndPage::get()->first();
         $lostPasswordForm->sessionMessage(
             _t(

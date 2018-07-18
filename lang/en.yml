@@ -1,0 +1,7 @@
+en:
+  Firesphere\HaveIBeenPwnd\Models\HaveIBeenPwndPage:
+    PLURALNAME: 'Have I Been Pwnd Pages'
+    PLURALS:
+      one: 'A Have I Been Pwnd Page'
+      other: '{count} Have I Been Pwnd Pages'
+    SINGULARNAME: 'Have I Been Pwnd Page'
