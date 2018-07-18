@@ -51,6 +51,7 @@ class HaveIBeenPwndService
             ]
         ]);
 
+        Debug::dump($result->getStatusCode());
         return $this->checkList($result, $shaEnd);
     }
 
