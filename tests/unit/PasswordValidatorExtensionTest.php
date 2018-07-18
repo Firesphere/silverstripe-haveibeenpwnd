@@ -16,6 +16,10 @@ class PasswordValidatorExtensionTest extends SapphireTest
 {
     public function testUpdateValidatePasswordAllowAll()
     {
+        Config::modify()->set(PasswordValidatorExtension::class, 'allow_pwnd', true);
+        Config::modify()->set(PasswordValidatorExtension::class, 'pwn_treshold', 0);
+        Config::modify()->set(PasswordValidatorExtension::class, 'save_pwnd', false);
+
         /** @var PasswordValidatorExtension $extension */
         $extension = Injector::inst()->get(PasswordValidatorExtension::class);
 
@@ -34,6 +38,7 @@ class PasswordValidatorExtensionTest extends SapphireTest
     {
         Config::modify()->set(PasswordValidatorExtension::class, 'allow_pwnd', false);
         Config::modify()->set(PasswordValidatorExtension::class, 'pwn_treshold', 1);
+        Config::modify()->set(PasswordValidatorExtension::class, 'save_pwnd', false);
         /** @var PasswordValidatorExtension $extension */
         $extension = Injector::inst()->get(PasswordValidatorExtension::class);
 
@@ -56,7 +61,9 @@ class PasswordValidatorExtensionTest extends SapphireTest
 
     public function testUpdateValidatePasswordDenyAtTen()
     {
+        Config::modify()->set(PasswordValidatorExtension::class, 'allow_pwnd', true);
         Config::modify()->set(PasswordValidatorExtension::class, 'pwn_treshold', 10);
+        Config::modify()->set(PasswordValidatorExtension::class, 'save_pwnd', false);
 
         /** @var PasswordValidatorExtension $extension */
         $extension = Injector::inst()->get(PasswordValidatorExtension::class);
@@ -84,12 +91,34 @@ class PasswordValidatorExtensionTest extends SapphireTest
         $this->assertEquals(11, $member->PasswordIsPwnd);
     }
 
-    protected function setUp()
+    public function testStoredBreached()
     {
-        Config::modify()->set(PasswordValidatorExtension::class, 'allow_pwnd', true);
-        Config::modify()->set(PasswordValidatorExtension::class, 'pwn_treshold', 0);
-        Config::modify()->set(PasswordValidatorExtension::class, 'save_pwnd', false);
+        Config::modify()->set(PasswordValidatorExtension::class, 'allow_pwnd', false);
+        Config::modify()->set(PasswordValidatorExtension::class, 'pwn_treshold', 1);
+        Config::modify()->set(PasswordValidatorExtension::class, 'save_pwnd', true);
 
-        return parent::setUp();
+
+        /** @var PasswordValidatorExtension $extension */
+        $extension = Injector::inst()->get(PasswordValidatorExtension::class);
+
+        /** @var Member $member */
+        $member = Member::create(['Email' => 'test@test.com']);
+        /** @var ValidationResult $valid */
+        $valid = ValidationResult::create();
+
+        $body = file_get_contents(__DIR__ . '/../fixtures/pwnd1234.txt');
+        $body2 = file_get_contents(__DIR__ . '/../fixtures/breachmails.json');
+        // This sets up the mock client to respond to the request it gets
+        // with an HTTP 200 containing your mock body.
+        $mock = new MockHandler([
+            new Response(123, [], $body),
+            new Response(123, [], $body2),
+        ]);
+
+        $extension->updateValidatePassword('1234', $member, $valid, ['handler' => $mock]);
+
+        $messages = $valid->getMessages();
+        $this->assertContains('2fast4u', $member->BreachedSites);
+        $this->assertContains('2fast4u', $messages[1]['message']);
     }
 }

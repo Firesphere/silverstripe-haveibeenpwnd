@@ -29,8 +29,8 @@ class HaveIBeenPwndServiceTest extends SapphireTest
         // This sets up the mock client to respond to the request it gets
         // with an HTTP 200 containing your mock body.
         $mock = new MockHandler([
-            new Response(200, [], $body),
-            new Response(200, [], $body),
+            new Response(123, [], $body),
+            new Response(123, [], $body),
         ]);
 
         /** @var HaveIBeenPwndService $service */
@@ -51,8 +51,8 @@ class HaveIBeenPwndServiceTest extends SapphireTest
         // This sets up the mock client to respond to the request it gets
         // with an HTTP 200 containing your mock body.
         $mock = new MockHandler([
-            new Response(200, [], $body),
-            new Response(200, [], '[]'),
+            new Response(123, [], $body),
+            new Response(123, [], '[]'),
         ]);
 
         /** @var HaveIBeenPwndService $service */

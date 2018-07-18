@@ -60,7 +60,7 @@ class PasswordValidatorExtension extends Extension
 
         // Although it would be stupid, the pwnd treshold can be disabled
         // Or even allow for breached passwords. Not exactly ideal either
-        if (($isPwndCount > $breachCount && $breachCount !== 0) || (!$allowBreach && $isPwndCount)) {
+        if (($isPwndCount >= $breachCount && $breachCount !== 0) || (!$allowBreach && $isPwndCount)) {
             $valid->addFieldError(
                 'Password',
                 _t(static::class . 'KNOWN', 'Your password appears in the Have I Been Pwnd database')
