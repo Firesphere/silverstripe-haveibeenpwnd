@@ -89,7 +89,6 @@ class LoginHandlerTest extends SapphireTest
         $passwordForm = LostPasswordForm::create($this->handler, Authenticator::class, 'lostPasswordForm');
 
         $this->assertContains('You can read more here', $passwordForm->getMessage());
-
     }
 
     protected function setUp()
