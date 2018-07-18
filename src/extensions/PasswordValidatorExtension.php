@@ -25,10 +25,22 @@ class PasswordValidatorExtension extends Extension
      */
     protected $service;
 
+    /**
+     * @config
+     * @var bool
+     */
     private static $allow_pwnd = false;
 
+    /**
+     * @config
+     * @var int
+     */
     private static $pwn_treshold = 1;
 
+    /**
+     * @config
+     * @var bool
+     */
     private static $save_pwnd = true;
 
     /**
