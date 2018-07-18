@@ -51,7 +51,6 @@ class HaveIBeenPwndService
             ]
         ]);
 
-        Debug::dump($result->getStatusCode());
         return $this->checkList($result, $shaEnd);
     }
 
@@ -65,6 +64,8 @@ class HaveIBeenPwndService
         $count = 0;
         $shaEnd = strtoupper($shaEnd);
         $suffixes = explode("\r\n", $result->getBody());
+        Debug::dump($suffixes);
+        Debug::dump($shaEnd);
         foreach ($suffixes as $suffix) {
             list($suffix, $pwnCount) = explode(':', $suffix);
             if ($suffix === $shaEnd) {
