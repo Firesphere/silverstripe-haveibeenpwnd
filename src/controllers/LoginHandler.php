@@ -54,17 +54,17 @@ class LoginHandler extends BaseLoginHandler
             // We do not want to lock the member out immediately if the password is incorrect anyway
             // Due to a lack of a `return` option in the current extension, we need to have this copy-paste
             // before handing over to the parent
-//            if (Director::isLive()) { // Only do this on live environments. Test and Dev should be allowed, saves the engineer a lot of hassle
-            $password = $data['Password'];
+            if (!HaveIBeenPwndService::config()->get('allow_pwnd')) { // Only do this on live environments. Test and Dev should be allowed, saves the engineer a lot of hassle
+                $password = $data['Password'];
 
-            $breachCount = $this->service->checkPwndPassword($password);
+                $breachCount = $this->service->checkPwndPassword($password);
 
-            if ($breachCount) {
-                $this->lockoutMember($data, $breachCount);
+                if ($breachCount) {
+                    $this->lockoutMember($data, $breachCount);
 
-                return $this->redirectToResetPassword();
+                    return $this->redirectToResetPassword();
+                }
             }
-//            }
         }
 
         return parent::doLogin($data, $form, $request);

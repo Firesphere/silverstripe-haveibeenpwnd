@@ -26,24 +26,6 @@ class PasswordValidatorExtension extends Extension
     protected $service;
 
     /**
-     * @config
-     * @var bool
-     */
-    private static $allow_pwnd = false;
-
-    /**
-     * @config
-     * @var int
-     */
-    private static $pwn_treshold = 1;
-
-    /**
-     * @config
-     * @var bool
-     */
-    private static $save_pwnd = true;
-
-    /**
      * @param string $pwd
      * @param Member $member
      * @param ValidationResult $valid
@@ -55,20 +37,61 @@ class PasswordValidatorExtension extends Extension
     {
         $this->service = Injector::inst()->createWithArgs(HaveIBeenPwndService::class, [$params]);
 
-        $allowPwnd = static::config()->get('allow_pwnd');
-        $pwnTreshold = static::config()->get('pwn_treshold');
-        $savePwnd = static::config()->get('save_pwnd');
-        $isPwndCount = 0;
-        $breached = '';
+        $allowPwnd = HaveIBeenPwndService::config()->get('allow_pwnd');
+        $savePwnd = HaveIBeenPwndService::config()->get('save_pwnd');
 
+        $isPwndCount = $this->checkPwnCount($pwd, $member, $allowPwnd);
+        $breached = $this->checkPwndSites($member, $savePwnd);
+
+
+        // Although it would be stupid, the pwnd check can be disabled
+        // Or even allow for breached passwords. Not exactly ideal
+        if ($isPwndCount && !$allowPwnd) {
+            $valid->addFieldError(
+                'Password',
+                _t(static::class . 'KNOWN', 'Your password appears in the Have I Been Pwnd database')
+            );
+            if ($breached) {
+                $message = _t(
+                    static::class . 'KNOWN_BREACH_PLUS_BREACHES',
+                    "To help you identify where you have been breached, your username or email address appears in the following breaches:\r\n"
+                );
+
+                $valid->addError($message . $breached);
+            }
+        }
+    }
+
+    /**
+     * @param $pwd
+     * @param $member
+     * @param $allowPwnd
+     * @return int
+     * @throws \GuzzleHttp\Exception\GuzzleException
+     */
+    protected function checkPwnCount($pwd, $member, $allowPwnd)
+    {
+        $isPwndCount = 0;
         // There's no need to check if breaches are allowed, it's a pointless excercise
-        if (!$allowPwnd || $pwnTreshold !== 0) {
+        if (!$allowPwnd) {
             $isPwndCount = $this->service->checkPwndPassword($pwd);
         }
 
         // Always mark as Pwnd if it's true
         $member->PasswordIsPwnd = $isPwndCount;
 
+        return $isPwndCount;
+    }
+
+    /**
+     * @param $member
+     * @param $savePwnd
+     * @return string
+     * @throws \GuzzleHttp\Exception\GuzzleException
+     */
+    protected function checkPwndSites($member, $savePwnd)
+    {
+        $breached = '';
         // If storing the breached sites, check the email as well
         if ($savePwnd) {
             usleep(1500); // We need to conform to the FUP, max 1 request per 1500ms
@@ -76,14 +99,6 @@ class PasswordValidatorExtension extends Extension
             $member->BreachedSites = $breached;
         }
 
-        // Although it would be stupid, the pwnd treshold can be disabled
-        // Or even allow for breached passwords. Not exactly ideal either
-        if (($isPwndCount >= $pwnTreshold && $pwnTreshold !== 0) || (!$allowPwnd && $isPwndCount)) {
-            $valid->addFieldError(
-                'Password',
-                _t(static::class . 'KNOWN', 'Your password appears in the Have I Been Pwnd database')
-            );
-            $valid->addError($breached);
-        }
+        return $breached;
     }
 }

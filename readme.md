@@ -26,13 +26,18 @@ Only a count of the amount of times the password shows in the database is collec
 ```yaml
 
 ---
-name: MyPwnConfig
-    after: HaveIBeenPwnd
+Name: MyPwnConfig
+    after: HaveIBeenPwndConfig
 ---
-Firesphere\HaveIBeenPwnd\Extensions\PasswordValidatorExtension:
+Firesphere\HaveIBeenPwnd\Services\HaveIBeenPwndService:
   allow_pwnd: false
-  save_pwnd: false
-  pwn_treshold: 10
+  save_pwnd: true
+---
+Only:
+  environment: dev
+---
+Firesphere\HaveIBeenPwnd\Services\HaveIBeenPwndService:
+  allow_pwnd: true
 
 ```
 
@@ -41,9 +46,6 @@ Firesphere\HaveIBeenPwnd\Extensions\PasswordValidatorExtension:
 `allow_pwnd` If set to true, passwords that appear in the Have I been Pwnd database will be allowed
 
 `save_pwnd` If set to true, all the breaches in which the user's username or email address appears
-
-`pwn_treshold` If set to 0, a user may use the password despite it being breached. If set to another number, the password may be used if the amount of breaches is lower than the treshold.
-This parameter is ignored if `allow_pwnd` is set to false
 
 ## Applying the validator extension to other PasswordValidators
 
@@ -58,6 +60,11 @@ MyVendor\MyNameSpace\MyPasswordValidator:
 ```
 
 Replacing the vendor\namespace\validator with your own Validator namespace and classname
+
+## Only environment
+
+To not make engineers life impossible and allow for using pwnd passwords on local environments in `dev` mode,
+by default, the Pwnd service is turned off in `dev` mode
 
 # Actual license
 

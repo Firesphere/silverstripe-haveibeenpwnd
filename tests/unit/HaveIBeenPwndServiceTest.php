@@ -61,7 +61,7 @@ class HaveIBeenPwndServiceTest extends SapphireTest
         $response = $service->checkPwndEmail($this->member);
 
         $this->assertContains(
-            'To help you identify where you have been breached, your username or email address appears in the following breaches:',
+            '000webhost',
             $response
         );
         $this->member->Email = 'nonexisting@realy-i-do-not-exist.random';

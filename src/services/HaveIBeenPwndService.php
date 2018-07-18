@@ -11,20 +11,56 @@ use SilverStripe\Core\Injector\Injector;
 use SilverStripe\Dev\Debug;
 use SilverStripe\Security\Member;
 
+/**
+ * Class HaveIBeenPwndService
+ * @package Firesphere\HaveIBeenPwnd\Services
+ */
 class HaveIBeenPwndService
 {
     use Configurable;
 
+    /**
+     * Api endpoint emails
+     */
     const PWND_URL = 'https://haveibeenpwned.com/api/';
 
+    /**
+     * API endpoint passwords
+     */
     const PWND_API_URL = 'https://api.pwnedpasswords.com/';
 
+    /**
+     * API Version
+     */
     const API_VERSION = '2';
 
+    /**
+     * Useragent
+     */
     const USER_AGENT = 'SilverStripe-Firesphere-HaveIBeenPwnd-checker/1.0';
 
+    /**
+     * @var array
+     */
     protected $args;
 
+    /**
+     * @config
+     * @var bool
+     */
+    private static $allow_pwnd = false;
+
+    /**
+     * @config
+     * @var bool
+     */
+    private static $save_pwnd = true;
+
+
+    /**
+     * HaveIBeenPwndService constructor.
+     * @param array $args
+     */
     public function __construct($args = [])
     {
         $this->args = $args;
@@ -107,13 +143,8 @@ class HaveIBeenPwndService
     {
         $body = $result->getBody();
 
-        $breakline = "\r\n";
         $sites = [];
 
-        $message = _t(
-            static::class . 'KNOWN_BREACH_PLUS_BREACHES',
-            "To help you identify where you have been breached, your username or email address appears in the following breaches:$breakline"
-        );
         $breaches = Convert::json2array($body);
         foreach ($breaches as $breach) {
             if (!empty($breach['Name'])) {
@@ -122,7 +153,7 @@ class HaveIBeenPwndService
         }
 
         if (count($sites)) {
-            return $message . ' ' . implode(', ', $sites);
+            return implode(', ', $sites);
         }
 
         return '';
