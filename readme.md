@@ -5,17 +5,24 @@
 
 # _**WARNING**_
 
-This module is not a replacement for two factor authentication, nor will it improve security for existing users that don't change their passwords.
+This module is not a replacement for two factor authentication.
 
-This module is only to make sure no known passwords are re-used.
+Users are _actively_ locked out if their password is found to be pwnd and forced to reset their password.
 
 Although it adds to the user security te enforce unique passwords, this module will not prevent any password leaks like the ones used by HaveIBeenPwnd.
 
 # Have I Been Pwnd for SilverStripe
 
-This module checks on password change, if the SHA1 of the password appears in the Have I Been Pwnd database.
+This module checks on password change and login, if the SHA1 of the password appears in the Have I Been Pwnd database.
 
-Only a count of the amount of times the password shows in the database is collected and stored.
+There is _never_ a full password transmitted to HaveIBeenPwnd, only the first 5 characters of a SHA1 of the password, the response
+from HaveIBeenPwnd is then compared locally.
+
+Given the nature of HaveIBeenPwnd, even if a password is intercepted (the connection is HTTPS and Troy Hunt is not the easiest
+when it comes to security), the password has already been out in the wild, so this scenario is a very unlikely one to cause more breaches.
+
+Only a count of the amount of times the password shows in the database is collected, next to which known breaches contain the users Email or Username.
+This information about the password and the email are unrelated. HaveIBeenPwnd does _not_ provide a relation between the two. On purpose.
 
 # Installation
 
