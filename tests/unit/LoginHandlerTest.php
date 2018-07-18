@@ -39,7 +39,6 @@ class LoginHandlerTest extends SapphireTest
 
     public function testDoLogin()
     {
-
     }
 
     protected function setUp()
