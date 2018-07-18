@@ -19,7 +19,6 @@ class MemberExtensionTest extends SapphireTest
 
         $this->assertInstanceOf(ReadonlyField::class, $fields->dataFieldByName('PasswordIsPwnd'));
         $this->assertNotContains('If the error says that you "have been Pwnd", ', $fields->forTemplate());
-        $this->assertFalse($fields->hasTabSet('HaveIBeenPwnd'));
 
         $this->member->BreachedSites = '000error, test';
 
@@ -37,7 +36,8 @@ class MemberExtensionTest extends SapphireTest
         $this->member = Member::create([
             'Email'          => 'test@test.com',
             'PasswordIsPwnd' => 0,
-            'Password'       => '1234567890' // I is good password
+            'Password'       => '1234567890', // I is good password
+            'BreachedSites'  => ''
         ]);
 
         return parent::setUp();
