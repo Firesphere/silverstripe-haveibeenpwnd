@@ -52,6 +52,7 @@ class PasswordValidatorExtension extends Extension
         // There's no need to check if breaches are allowed, it's a pointless excercise
         if (!$allowPwnd || $pwnTreshold !== 0) {
             $isPwndCount = $this->service->checkPwndPassword($pwd);
+            Debug::dump($isPwndCount);
         }
 
 
