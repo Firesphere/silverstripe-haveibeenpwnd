@@ -6,7 +6,6 @@ use Firesphere\HaveIBeenPwnd\Services\HaveIBeenPwndService;
 use SilverStripe\Core\Config\Configurable;
 use SilverStripe\Core\Extension;
 use SilverStripe\Core\Injector\Injector;
-use SilverStripe\Dev\Debug;
 use SilverStripe\ORM\ValidationResult;
 use SilverStripe\Security\Member;
 use SilverStripe\Security\PasswordValidator;

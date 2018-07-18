@@ -2,7 +2,6 @@
 
 namespace Firesphere\HaveIBeenPwnd\Tests;
 
-use SilverStripe\Dev\Debug;
 use SilverStripe\Dev\SapphireTest;
 use SilverStripe\Forms\ReadonlyField;
 use SilverStripe\Security\Member;

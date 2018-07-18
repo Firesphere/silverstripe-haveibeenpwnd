@@ -8,7 +8,6 @@ use Psr\Http\Message\ResponseInterface;
 use SilverStripe\Core\Config\Configurable;
 use SilverStripe\Core\Convert;
 use SilverStripe\Core\Injector\Injector;
-use SilverStripe\Dev\Debug;
 use SilverStripe\Security\Member;
 
 /**
@@ -38,24 +37,20 @@ class HaveIBeenPwndService
      * Useragent
      */
     const USER_AGENT = 'SilverStripe-Firesphere-HaveIBeenPwnd-checker/1.0';
-
-    /**
-     * @var array
-     */
-    protected $args;
-
     /**
      * @config
      * @var bool
      */
     private static $allow_pwnd = false;
-
     /**
      * @config
      * @var bool
      */
     private static $save_pwnd = true;
-
+    /**
+     * @var array
+     */
+    protected $args;
 
     /**
      * HaveIBeenPwndService constructor.

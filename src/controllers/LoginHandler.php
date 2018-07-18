@@ -4,7 +4,6 @@ namespace Firesphere\HaveIBeenPwnd\Controllers;
 
 use Firesphere\HaveIBeenPwnd\Models\HaveIBeenPwndPage;
 use Firesphere\HaveIBeenPwnd\Services\HaveIBeenPwndService;
-use SilverStripe\Control\Director;
 use SilverStripe\Control\HTTPRequest;
 use SilverStripe\Control\HTTPResponse;
 use SilverStripe\Core\Injector\Injector;
@@ -44,8 +43,6 @@ class LoginHandler extends BaseLoginHandler
      */
     public function doLogin($data, MemberLoginForm $form, HTTPRequest $request)
     {
-        $failureMessage = null;
-
         $this->extend('beforeLogin');
         // Successful login
         /** @var ValidationResult $result */
@@ -95,10 +92,10 @@ class LoginHandler extends BaseLoginHandler
      */
     protected function redirectToResetPassword()
     {
-        $cp = LostPasswordForm::create($this, Authenticator::class, 'lostPasswordForm');
+        $lostPasswordForm = LostPasswordForm::create($this, Authenticator::class, 'lostPasswordForm');
 
         $pwndPage = HaveIBeenPwndPage::get()->first();
-        $cp->sessionMessage(
+        $lostPasswordForm->sessionMessage(
             _t(
                 static::class . '.PASSWORDEXPIREDORBREACHED',
                 'Because of security concerns with the password you entered, you need to reset your password. 
@@ -108,7 +105,7 @@ class LoginHandler extends BaseLoginHandler
         );
 
         if ($pwndPage) {
-            $cp->sessionMessage(
+            $lostPasswordForm->sessionMessage(
                 _t(
                     static::class . '.PASSWORDEXPIRYREASON',
                     '<a href="{link}">You can read more here</a>',
