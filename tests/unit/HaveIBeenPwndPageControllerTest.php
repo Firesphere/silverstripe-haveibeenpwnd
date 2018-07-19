@@ -16,24 +16,28 @@ class HaveIBeenPwndPageControllerTest extends SapphireTest
 {
     public function testClassExists()
     {
+        /** @var HaveIBeenPwndPage $page */
         $page = Injector::inst()->get(HaveIBeenPwndPage::class);
 
-        $controller = Injector::inst()->get(HaveIBeenPwndPageController::class, $page);
+        /** @var HaveIBeenPwndPageController $controller */
+        $controller = Injector::inst()->get(HaveIBeenPwndPageController::class, false, [$page]);
 
         $this->assertInstanceOf(HaveIBeenPwndPageController::class, $controller);
     }
 
     public function testCheckEmail()
     {
+        /** @var HaveIBeenPwndPage $page */
         $page = Injector::inst()->get(HaveIBeenPwndPage::class);
 
-        $controller = Injector::inst()->get(HaveIBeenPwndPageController::class, true, [$page]);
+        /** @var HaveIBeenPwndPageController $controller */
+        $controller = Injector::inst()->get(HaveIBeenPwndPageController::class, false, [$page]);
 
         // Log out. Solidly I hope
         Security::setCurrentUser(null);
         Injector::inst()->get(IdentityStore::class)->logOut();
 
-        $response = $controller->checkEmail();
+        $response = $controller->checkEmail(null);
 
         // If there's no user, it should just return itself
         $this->assertInstanceOf(HaveIBeenPwndPageController::class, $response);
@@ -50,11 +54,12 @@ class HaveIBeenPwndPageControllerTest extends SapphireTest
         /** @var HaveIBeenPwndPageController $controller */
         $controller = Injector::inst()->get(HaveIBeenPwndPageController::class, false, [$page]);
 
-        $response = $controller->checkEmail(['handler' => $mock]);
+        /** @var HaveIBeenPwndPageController $response */
+        $response = $controller->checkEmail(null, ['handler' => $mock]);
 
-        $this->assertContains('17Media', $response->Content);
+        $this->assertContains('17Media', $response->dataRecord->Content);
 
         // We don't have a full set, so Yahoo shouldn't show
-        $this->assertNotContains('Yahoo', $response->Content);
+        $this->assertNotContains('Yahoo', $response->dataRecord->Content);
     }
 }

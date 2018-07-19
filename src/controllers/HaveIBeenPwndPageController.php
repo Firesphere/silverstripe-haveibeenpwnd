@@ -2,8 +2,10 @@
 
 namespace Firesphere\HaveIBeenPwnd\Controllers;
 
+use Firesphere\HaveIBeenPwnd\Models\HaveIBeenPwndPage;
 use Firesphere\HaveIBeenPwnd\Services\HaveIBeenPwndService;
 use PageController;
+use SilverStripe\Control\HTTPRequest;
 use SilverStripe\Core\Injector\Injector;
 use SilverStripe\Security\Member;
 use SilverStripe\Security\Security;
@@ -11,6 +13,8 @@ use SilverStripe\Security\Security;
 /**
  * Class \Firesphere\HaveIBeenPwnd\Controllers\HaveIBeenPwndPageController
  *
+ * @property HaveIBeenPwndPage $data
+ * @property HaveIBeenPwndPage $dataRecord
  */
 class HaveIBeenPwndPageController extends PageController
 {
@@ -28,13 +32,13 @@ class HaveIBeenPwndPageController extends PageController
         'check-email' => 'checkEmail',
     ];
 
-
     /**
+     * @param HTTPRequest|null $request
      * @param array $params
      * @return $this
      * @throws \GuzzleHttp\Exception\GuzzleException
      */
-    public function checkEmail(array $params = [])
+    public function checkEmail($request = null, $params = [])
     {
         /** @var Member|null $user */
         $user = Security::getCurrentUser();

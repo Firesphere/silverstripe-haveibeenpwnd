@@ -2,8 +2,12 @@
 
 namespace Firesphere\HaveIBeenPwnd\Tests;
 
+use Firesphere\HaveIBeenPwnd\Extensions\MemberExtension;
+use SilverStripe\Core\Injector\Injector;
 use SilverStripe\Dev\SapphireTest;
+use SilverStripe\Forms\CheckboxField;
 use SilverStripe\Forms\ReadonlyField;
+use SilverStripe\Forms\Tab;
 use SilverStripe\Security\Member;
 
 class MemberExtensionTest extends SapphireTest
@@ -19,13 +23,20 @@ class MemberExtensionTest extends SapphireTest
 
         $this->assertInstanceOf(ReadonlyField::class, $fields->dataFieldByName('PasswordIsPwnd'));
         $this->assertNotContains('If the error says that you "have been Pwnd", ', $fields->forTemplate());
+        $this->assertNull($fields->fieldByName('Root.HaveIBeenPwnd'));
+        $this->assertInstanceOf(CheckboxField::class, $fields->dataFieldByName('PwndDisabled'));
 
         $this->member->BreachedSites = '000error, test';
 
         $fields = $this->member->getCMSFields();
 
+        /** @var MemberExtension $extension */
+        $extension = Injector::inst()->get(MemberExtension::class);
+        $extension->setOwner($this->member);
+        $extension->updateCMSFields($fields);
+
+        $this->assertInstanceOf(Tab::class, $fields->fieldByName('Root.HaveIBeenPwnd'));
         $this->assertInstanceOf(ReadonlyField::class, $fields->dataFieldByName('BreachedSites'));
-        $this->assertTrue($fields->hasTabSet('HaveIBeenPwnd'));
 
         $this->assertContains('Breached sites', $fields->forTemplate());
         $this->assertContains('If the error says that you "have been Pwnd", ', $fields->forTemplate());

@@ -28,6 +28,19 @@ This information about the password and the email are unrelated. HaveIBeenPwnd d
 
 `composer require firesphere/haveibeenpwnd`
 
+# Can I USe
+
+Simply put? No. Admitted, this is Open Source software, and in theory, you can use it any way you want.
+
+In reality, this software is copyrighted. If you are an open source project, you can use it the way you like, but if you want to use
+this for a commercial product, it's not free. You can license this work, by buying a usage subscription. It will allow you this, and all
+future use of the software.
+
+### But it is licensed BSD!
+
+Yes, it is. But supporting the developer is not just your standard BullShit Doit
+
+
 # Configuration
 
 ```yaml

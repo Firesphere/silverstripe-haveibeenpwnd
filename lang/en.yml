@@ -1,4 +1,15 @@
 en:
+  Firesphere\HaveIBeenPwnd\Controllers\LoginHandler:
+    PASSWORDEXPIREDORBREACHED: "Because of security concerns with the password you entered, you need to reset your password. \n                Do not worry, your account has not been compromised, this is just a precaution"
+    PASSWORDEXPIRYREASON: '<a href="{link}">You can read more here</a>'
+  Firesphere\HaveIBeenPwnd\Extensions\MemberExtension:
+    AMOUNT: 'Amount of times the password appears in the Have I Been Pwnd database'
+    BREACHEDSITES: 'Breached sites'
+    PWNDHelp: 'If the error says that you "have been Pwnd", it means your password appears in the <a href="https://haveibeenpwned.com/Privacy">Have I Been Pwnd</a> database. Therefore, we can not accept your password, because it is insecure or known to have been breached. Before a password is safely stored in our database, we test if the password has been breached. We do not share your password. We run a safe test against the HaveIBeenPwnd database to. None of your data is shared or stored at HaveIBeenPwnd. For more information, you can read up on "Password safety", and we strongly recommend installing a password manager if you haven''t already. Several options are LastPass, BitWarden and 1Password. These services are also able to test your passwords against the HaveIBeenPwnd database, to see if your passwords are secure and safe.<br />Furthermore, <a href="https://www.troyhunt.com/introducing-306-million-freely-downloadable-pwned-passwords/">Troy Hunt explains why and how this service is important</a>.'
+    PWNDTAB: 'Have I Been Pwnd?'
+  Firesphere\HaveIBeenPwnd\Extensions\PasswordValidatorExtension:
+    KNOWN: 'Your password appears in the Have I Been Pwnd database'
+    KNOWN_BREACH_PLUS_BREACHES: "To help you identify where you have been breached, your username or email address appears in the following breaches:\r\n"
   Firesphere\HaveIBeenPwnd\Models\HaveIBeenPwndPage:
     PLURALNAME: 'Have I Been Pwnd Pages'
     PLURALS:
