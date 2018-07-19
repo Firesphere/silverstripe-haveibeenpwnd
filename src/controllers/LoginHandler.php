@@ -4,9 +4,11 @@ namespace Firesphere\HaveIBeenPwnd\Controllers;
 
 use Firesphere\HaveIBeenPwnd\Models\HaveIBeenPwndPage;
 use Firesphere\HaveIBeenPwnd\Services\HaveIBeenPwndService;
+use GuzzleHttp\Exception\GuzzleException;
 use SilverStripe\Control\HTTPRequest;
 use SilverStripe\Control\HTTPResponse;
 use SilverStripe\Core\Injector\Injector;
+use SilverStripe\ORM\ValidationException;
 use SilverStripe\ORM\ValidationResult;
 use SilverStripe\Security\Authenticator;
 use SilverStripe\Security\Member;
@@ -16,6 +18,10 @@ use SilverStripe\Security\MemberAuthenticator\MemberAuthenticator;
 use SilverStripe\Security\MemberAuthenticator\MemberLoginForm;
 use SilverStripe\Security\Security;
 
+/**
+ * Class LoginHandler
+ * @package Firesphere\HaveIBeenPwnd\Controllers
+ */
 class LoginHandler extends BaseLoginHandler
 {
 
@@ -25,6 +31,12 @@ class LoginHandler extends BaseLoginHandler
     protected $service;
 
 
+    /**
+     * LoginHandler constructor.
+     *
+     * @param string $link
+     * @param MemberAuthenticator $authenticator
+     */
     public function __construct($link, MemberAuthenticator $authenticator)
     {
         /** @var HaveIBeenPwndService service */
@@ -38,8 +50,8 @@ class LoginHandler extends BaseLoginHandler
      * @param MemberLoginForm $form
      * @param HTTPRequest $request
      * @return HTTPResponse
-     * @throws \GuzzleHttp\Exception\GuzzleException
-     * @throws \SilverStripe\ORM\ValidationException
+     * @throws GuzzleException
+     * @throws ValidationException
      */
     public function doLogin($data, MemberLoginForm $form, HTTPRequest $request)
     {
@@ -70,7 +82,7 @@ class LoginHandler extends BaseLoginHandler
     /**
      * @param $data
      * @param $breachCount
-     * @throws \SilverStripe\ORM\ValidationException
+     * @throws ValidationException
      */
     protected function lockoutMember($data, $breachCount)
     {
@@ -130,9 +142,12 @@ class LoginHandler extends BaseLoginHandler
 
     /**
      * @param HaveIBeenPwndService $service
+     * @return LoginHandler
      */
     public function setService($service)
     {
         $this->service = $service;
+
+        return $this;
     }
 }

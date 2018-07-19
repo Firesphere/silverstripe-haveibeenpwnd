@@ -37,16 +37,19 @@ class HaveIBeenPwndService
      * Useragent
      */
     const USER_AGENT = 'SilverStripe-Firesphere-HaveIBeenPwnd-checker/1.0';
+
     /**
      * @config
      * @var bool
      */
     private static $allow_pwnd = false;
+
     /**
      * @config
      * @var bool
      */
     private static $save_pwnd = true;
+
     /**
      * @var array
      */

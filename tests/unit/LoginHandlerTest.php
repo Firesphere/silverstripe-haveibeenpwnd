@@ -12,7 +12,6 @@ use SilverStripe\Control\HTTPRequest;
 use SilverStripe\Control\Session;
 use SilverStripe\Core\Config\Config;
 use SilverStripe\Core\Injector\Injector;
-use SilverStripe\Dev\Debug;
 use SilverStripe\Dev\SapphireTest;
 use SilverStripe\Security\Authenticator;
 use SilverStripe\Security\IdentityStore;
@@ -47,9 +46,10 @@ class LoginHandlerTest extends SapphireTest
     public function testGetSetService()
     {
         $service = Injector::inst()->get(HaveIBeenPwndService::class);
-        $this->handler->setService($service);
+        $response = $this->handler->setService($service);
 
         $this->assertInstanceOf(HaveIBeenPwndService::class, $this->handler->getService());
+        $this->assertInstanceOf(LoginHandler::class, $response);
     }
 
     public function testDoLogin()

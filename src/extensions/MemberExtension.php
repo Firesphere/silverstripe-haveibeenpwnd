@@ -17,6 +17,9 @@ use SilverStripe\Security\Member;
  */
 class MemberExtension extends DataExtension
 {
+    /**
+     * @var array
+     */
     private static $db = [
         'PasswordIsPwnd' => 'Int',
         'BreachedSites'  => 'Text'

@@ -14,10 +14,16 @@ use SilverStripe\Security\Security;
  */
 class HaveIBeenPwndPageController extends PageController
 {
+    /**
+     * @var array
+     */
     private static $allowed_actions = [
         'checkEmail',
     ];
 
+    /**
+     * @var array
+     */
     private static $url_handlers = [
         'check-email' => 'checkEmail',
     ];
