@@ -1,8 +1,8 @@
 <?php
 
-namespace Firesphere\HaveIBeenPwnd\Tests;
+namespace Firesphere\HaveIBeenPwned\Tests;
 
-use Firesphere\HaveIBeenPwnd\Services\HaveIBeenPwndService;
+use Firesphere\HaveIBeenPwned\Services\HaveIBeenPwnedService;
 use GuzzleHttp\Handler\MockHandler;
 use GuzzleHttp\Psr7\Response;
 use SilverStripe\Core\Injector\Injector;
@@ -16,7 +16,7 @@ class HaveIBeenPwndServiceTest extends SapphireTest
     public function testGetSetArgs()
     {
         $args = ['test' => 'testing'];
-        $service = Injector::inst()->create(HaveIBeenPwndService::class);
+        $service = Injector::inst()->create(HaveIBeenPwnedService::class);
 
         $service->setArgs($args);
 
@@ -33,8 +33,8 @@ class HaveIBeenPwndServiceTest extends SapphireTest
             new Response(123, [], $body),
         ]);
 
-        /** @var HaveIBeenPwndService $service */
-        $service = Injector::inst()->createWithArgs(HaveIBeenPwndService::class, [['handler' => $mock]]);
+        /** @var HaveIBeenPwnedService $service */
+        $service = Injector::inst()->createWithArgs(HaveIBeenPwnedService::class, [['handler' => $mock]]);
 
         $response = $service->checkPwndPassword('123');
 
@@ -55,8 +55,8 @@ class HaveIBeenPwndServiceTest extends SapphireTest
             new Response(123, [], '[]'),
         ]);
 
-        /** @var HaveIBeenPwndService $service */
-        $service = Injector::inst()->createWithArgs(HaveIBeenPwndService::class, [['handler' => $mock]]);
+        /** @var HaveIBeenPwnedService $service */
+        $service = Injector::inst()->createWithArgs(HaveIBeenPwnedService::class, [['handler' => $mock]]);
 
         $response = $service->checkPwndEmail($this->member);
 

@@ -1,8 +1,8 @@
 <?php
 
-namespace Firesphere\HaveIBeenPwnd\Extensions;
+namespace Firesphere\HaveIBeenPwned\Extensions;
 
-use Firesphere\HaveIBeenPwnd\Services\HaveIBeenPwndService;
+use Firesphere\HaveIBeenPwned\Services\HaveIBeenPwnedService;
 use SilverStripe\Core\Config\Configurable;
 use SilverStripe\Core\Extension;
 use SilverStripe\Core\Injector\Injector;
@@ -12,7 +12,7 @@ use SilverStripe\Security\Member;
 use SilverStripe\Security\PasswordValidator;
 
 /**
- * Class \Firesphere\HaveIBeenPwnd\Extensions\PasswordValidatorExtension
+ * Class \Firesphere\HaveIBeenPwned\Extensions\PasswordValidatorExtension
  *
  * @property PasswordValidator|PasswordValidatorExtension $owner
  */
@@ -21,7 +21,7 @@ class PasswordValidatorExtension extends Extension
     use Configurable;
 
     /**
-     * @var HaveIBeenPwndService
+     * @var HaveIBeenPwnedService
      */
     protected $service;
 
@@ -36,11 +36,11 @@ class PasswordValidatorExtension extends Extension
      */
     public function updateValidatePassword($pwd, $member, $valid, $validator = null, $params = [])
     {
-        $this->service = Injector::inst()->createWithArgs(HaveIBeenPwndService::class, [$params]);
+        $this->service = Injector::inst()->createWithArgs(HaveIBeenPwnedService::class, [$params]);
 
         if (!$member->PwndDisabled) {
-            $allowPwnd = HaveIBeenPwndService::config()->get('allow_pwnd');
-            $savePwnd = HaveIBeenPwndService::config()->get('save_pwnd');
+            $allowPwnd = HaveIBeenPwnedService::config()->get('allow_pwnd');
+            $savePwnd = HaveIBeenPwnedService::config()->get('save_pwnd');
 
             $isPwndCount = $this->checkPwnCount($pwd, $member);
             $breached = $this->checkPwndSites($member, $savePwnd);
@@ -51,15 +51,16 @@ class PasswordValidatorExtension extends Extension
             if ($isPwndCount && !$allowPwnd) {
                 $valid->addFieldError(
                     'Password',
-                    _t(self::class . '.KNOWN', 'Your password appears in the Have I Been Pwnd database')
+                    _t(self::class . '.KNOWN', 'Your password appears {times} in the Have I Been Pwnd database',
+                        ['times' => $isPwndCount])
                 );
                 if ($breached) {
                     $message = _t(
-                        self::class . '.KNOWN_BREACH_PLUS_BREACHES',
-                        "To help you identify where you have been breached, your username or email address appears in the following breaches:\r\n"
+                        self::class . '.KNOWNBREACHMESSAGE',
+                        "To help you identify where you have been breached, see the HaveIBeenPwned tab for information"
                     );
 
-                    $valid->addError($message . $breached);
+                    $valid->addError($message);
                 }
             }
         }

@@ -1,9 +1,9 @@
 <?php
 
-namespace Firesphere\HaveIBeenPwnd\Tests;
+namespace Firesphere\HaveIBeenPwned\Tests;
 
-use Firesphere\HaveIBeenPwnd\Extensions\PasswordValidatorExtension;
-use Firesphere\HaveIBeenPwnd\Services\HaveIBeenPwndService;
+use Firesphere\HaveIBeenPwned\Extensions\PasswordValidatorExtension;
+use Firesphere\HaveIBeenPwned\Services\HaveIBeenPwnedService;
 use GuzzleHttp\Handler\MockHandler;
 use GuzzleHttp\Psr7\Response;
 use SilverStripe\Core\Config\Config;
@@ -16,8 +16,8 @@ class PasswordValidatorExtensionTest extends SapphireTest
 {
     public function testUpdateValidatePasswordAllowAll()
     {
-        Config::modify()->set(HaveIBeenPwndService::class, 'allow_pwnd', true);
-        Config::modify()->set(HaveIBeenPwndService::class, 'save_pwnd', false);
+        Config::modify()->set(HaveIBeenPwnedService::class, 'allow_pwnd', true);
+        Config::modify()->set(HaveIBeenPwnedService::class, 'save_pwnd', false);
         $body = file_get_contents(__DIR__ . '/../fixtures/pwnd1234.txt');
         $body2 = file_get_contents(__DIR__ . '/../fixtures/breachmails.json');
         // This sets up the mock client to respond to the request it gets
@@ -58,8 +58,8 @@ class PasswordValidatorExtensionTest extends SapphireTest
 
     public function testUpdateValidatePasswordDeny()
     {
-        Config::modify()->set(HaveIBeenPwndService::class, 'allow_pwnd', false);
-        Config::modify()->set(HaveIBeenPwndService::class, 'save_pwnd', false);
+        Config::modify()->set(HaveIBeenPwnedService::class, 'allow_pwnd', false);
+        Config::modify()->set(HaveIBeenPwnedService::class, 'save_pwnd', false);
         /** @var PasswordValidatorExtension $extension */
         $extension = Injector::inst()->get(PasswordValidatorExtension::class);
 
@@ -82,8 +82,8 @@ class PasswordValidatorExtensionTest extends SapphireTest
 
     public function testStoredBreached()
     {
-        Config::modify()->set(HaveIBeenPwndService::class, 'allow_pwnd', false);
-        Config::modify()->set(HaveIBeenPwndService::class, 'save_pwnd', false);
+        Config::modify()->set(HaveIBeenPwnedService::class, 'allow_pwnd', false);
+        Config::modify()->set(HaveIBeenPwnedService::class, 'save_pwnd', false);
 
 
         /** @var PasswordValidatorExtension $extension */
@@ -110,7 +110,7 @@ class PasswordValidatorExtensionTest extends SapphireTest
         $this->assertCount(1, $messages);
         $this->assertEmpty($member->BreachedSites);
 
-        Config::modify()->set(HaveIBeenPwndService::class, 'save_pwnd', true);
+        Config::modify()->set(HaveIBeenPwnedService::class, 'save_pwnd', true);
 
         /** @var ValidationResult $valid */
         $valid = ValidationResult::create();

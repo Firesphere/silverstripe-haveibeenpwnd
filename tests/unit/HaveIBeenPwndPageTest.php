@@ -6,10 +6,10 @@
  * Time: 11:38
  */
 
-namespace Firesphere\HaveIBeenPwnd\Tests;
+namespace Firesphere\HaveIBeenPwned\Tests;
 
-use Firesphere\HaveIBeenPwnd\Controllers\HaveIBeenPwndPageController;
-use Firesphere\HaveIBeenPwnd\Models\HaveIBeenPwndPage;
+use Firesphere\HaveIBeenPwned\Controllers\HaveIBeenPwnedPageController;
+use Firesphere\HaveIBeenPwned\Models\HaveIBeenPwnedPage;
 use SilverStripe\Core\Injector\Injector;
 use SilverStripe\Dev\SapphireTest;
 use SilverStripe\Security\DefaultAdminService;
@@ -19,10 +19,10 @@ class HaveIBeenPwndPageTest extends SapphireTest
 {
     public function testGetControllerName()
     {
-        /** @var HaveIBeenPwndPage $page */
-        $page = HaveIBeenPwndPage::create();
+        /** @var HaveIBeenPwnedPage $page */
+        $page = HaveIBeenPwnedPage::create();
 
-        $this->assertEquals(HaveIBeenPwndPageController::class, $page->getControllerName());
+        $this->assertEquals(HaveIBeenPwnedPageController::class, $page->getControllerName());
     }
 
     public function testCanCreate()
@@ -30,11 +30,11 @@ class HaveIBeenPwndPageTest extends SapphireTest
         $member = Injector::inst()->get(DefaultAdminService::class)->findOrCreateDefaultAdmin();
         Security::setCurrentUser($member);
 
-        if (HaveIBeenPwndPage::get()->count()) {
-            HaveIBeenPwndPage::get()->removeAll();
+        if (HaveIBeenPwnedPage::get()->count()) {
+            HaveIBeenPwnedPage::get()->removeAll();
         }
 
-        $page = HaveIBeenPwndPage::create();
+        $page = HaveIBeenPwnedPage::create();
 
         $this->assertTrue($page->canCreate($member));
 

@@ -1,10 +1,10 @@
 <?php
 
-namespace Firesphere\HaveIBeenPwnd\Tests;
+namespace Firesphere\HaveIBeenPwned\Tests;
 
-use Firesphere\HaveIBeenPwnd\Controllers\LoginHandler;
-use Firesphere\HaveIBeenPwnd\Models\HaveIBeenPwndPage;
-use Firesphere\HaveIBeenPwnd\Services\HaveIBeenPwndService;
+use Firesphere\HaveIBeenPwned\Controllers\LoginHandler;
+use Firesphere\HaveIBeenPwned\Models\HaveIBeenPwnedPage;
+use Firesphere\HaveIBeenPwned\Services\HaveIBeenPwnedService;
 use GuzzleHttp\Handler\MockHandler;
 use GuzzleHttp\Psr7\Response;
 use SilverStripe\Control\Controller;
@@ -43,15 +43,15 @@ class LoginHandlerTest extends SapphireTest
         $this->assertInstanceOf(LoginHandler::class, $this->handler);
         $this->assertNotSame(BaseLoginHandler::class, get_class($this->handler));
 
-        $this->assertInstanceOf(HaveIBeenPwndService::class, $this->handler->getService());
+        $this->assertInstanceOf(HaveIBeenPwnedService::class, $this->handler->getService());
     }
 
     public function testGetSetService()
     {
-        $service = Injector::inst()->get(HaveIBeenPwndService::class);
+        $service = Injector::inst()->get(HaveIBeenPwnedService::class);
         $response = $this->handler->setService($service);
 
-        $this->assertInstanceOf(HaveIBeenPwndService::class, $this->handler->getService());
+        $this->assertInstanceOf(HaveIBeenPwnedService::class, $this->handler->getService());
         $this->assertInstanceOf(LoginHandler::class, $response);
     }
 
@@ -81,7 +81,7 @@ class LoginHandlerTest extends SapphireTest
         $this->assertEquals(302, $response->getStatusCode());
         $this->assertNotContains('lostpassword', $response->getHeader('location'));
 
-        Config::modify()->set(HaveIBeenPwndService::class, 'allow_pwnd', false);
+        Config::modify()->set(HaveIBeenPwnedService::class, 'allow_pwnd', false);
 
         // Login with breached is not allowed
         $response = $this->handler->doLogin(['Email' => 'test@test.com', 'Password' => '1234567890'], $form, $request);
@@ -128,16 +128,16 @@ class LoginHandlerTest extends SapphireTest
 
     protected function setUp()
     {
-        Config::modify()->set(HaveIBeenPwndService::class, 'allow_pwnd', true);
-        Config::modify()->set(HaveIBeenPwndService::class, 'save_pwnd', false);
-        // This is about HaveIBeenPwnd, not actual password strength
+        Config::modify()->set(HaveIBeenPwnedService::class, 'allow_pwnd', true);
+        Config::modify()->set(HaveIBeenPwnedService::class, 'save_pwnd', false);
+        // This is about HaveIBeenPwned, not actual password strength
         $validator = new PasswordValidator();
 
         $validator->setMinLength(0);
         $validator->setHistoricCount(0);
         Member::set_password_validator($validator);
 
-        HaveIBeenPwndPage::create(['Title' => 'I am pwnd'])->write();
+        HaveIBeenPwnedPage::create(['Title' => 'I am pwnd'])->write();
 
         $member = Member::create(['Email' => 'test@test.com', 'Password' => '1234567890']);
         $this->memberId = $member->write();
@@ -151,7 +151,7 @@ class LoginHandlerTest extends SapphireTest
     protected function tearDown()
     {
         Member::get()->byID($this->memberId)->delete();
-        HaveIBeenPwndPage::get()->filter(['Title' => 'I am pwnd'])->first()->delete();
+        HaveIBeenPwnedPage::get()->filter(['Title' => 'I am pwnd'])->first()->delete();
         parent::tearDown();
     }
 }

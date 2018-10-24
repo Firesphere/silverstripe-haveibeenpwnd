@@ -1,9 +1,9 @@
 <?php
 
-namespace Firesphere\HaveIBeenPwnd\Controllers;
+namespace Firesphere\HaveIBeenPwned\Controllers;
 
-use Firesphere\HaveIBeenPwnd\Models\HaveIBeenPwndPage;
-use Firesphere\HaveIBeenPwnd\Services\HaveIBeenPwndService;
+use Firesphere\HaveIBeenPwned\Models\HaveIBeenPwnedPage;
+use Firesphere\HaveIBeenPwned\Services\HaveIBeenPwnedService;
 use GuzzleHttp\Exception\GuzzleException;
 use SilverStripe\Control\HTTPRequest;
 use SilverStripe\Control\HTTPResponse;
@@ -20,13 +20,13 @@ use SilverStripe\Security\Security;
 
 /**
  * Class LoginHandler
- * @package Firesphere\HaveIBeenPwnd\Controllers
+ * @package Firesphere\HaveIBeenPwned\Controllers
  */
 class LoginHandler extends BaseLoginHandler
 {
 
     /**
-     * @var HaveIBeenPwndService
+     * @var HaveIBeenPwnedService
      */
     protected $service;
 
@@ -39,8 +39,8 @@ class LoginHandler extends BaseLoginHandler
      */
     public function __construct($link, MemberAuthenticator $authenticator)
     {
-        /** @var HaveIBeenPwndService service */
-        $this->service = Injector::inst()->get(HaveIBeenPwndService::class);
+        /** @var HaveIBeenPwnedService service */
+        $this->service = Injector::inst()->get(HaveIBeenPwnedService::class);
 
         parent::__construct($link, $authenticator);
     }
@@ -61,7 +61,7 @@ class LoginHandler extends BaseLoginHandler
         // Due to a lack of a `return` option in the current extension, we need to have this copy-paste
         // before handing over to the parent
         // Also, exclude default admin from forcing a reset
-        if (!$isDefaultAdmin && !HaveIBeenPwndService::config()->get('allow_pwnd')) {
+        if (!$isDefaultAdmin && !HaveIBeenPwnedService::config()->get('allow_pwnd')) {
             $password = $data['Password'];
             $member = null;
             $identifierField = Member::config()->get('unique_identifier_field');
@@ -113,8 +113,8 @@ class LoginHandler extends BaseLoginHandler
     {
         $lostPasswordForm = LostPasswordForm::create($this, Authenticator::class, 'lostPasswordForm');
 
-        /** @var HaveIBeenPwndPage|null $pwndPage */
-        $pwndPage = HaveIBeenPwndPage::get()->first();
+        /** @var HaveIBeenPwnedPage|null $pwndPage */
+        $pwndPage = HaveIBeenPwnedPage::get()->first();
         $lostPasswordForm->sessionMessage(
             _t(
                 self::class . '.PASSWORDEXPIREDORBREACHED',
@@ -140,7 +140,7 @@ class LoginHandler extends BaseLoginHandler
     }
 
     /**
-     * @return HaveIBeenPwndService
+     * @return HaveIBeenPwnedService
      */
     public function getService()
     {
@@ -148,7 +148,7 @@ class LoginHandler extends BaseLoginHandler
     }
 
     /**
-     * @param HaveIBeenPwndService $service
+     * @param HaveIBeenPwnedService $service
      * @return LoginHandler
      */
     public function setService($service)

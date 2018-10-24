@@ -1,6 +1,6 @@
 <?php
 
-namespace Firesphere\HaveIBeenPwnd\Services;
+namespace Firesphere\HaveIBeenPwned\Services;
 
 use GuzzleHttp\Client;
 use GuzzleHttp\Exception\GuzzleException;
@@ -11,10 +11,10 @@ use SilverStripe\Core\Injector\Injector;
 use SilverStripe\Security\Member;
 
 /**
- * Class HaveIBeenPwndService
- * @package Firesphere\HaveIBeenPwnd\Services
+ * Class HaveIBeenPwnedService
+ * @package Firesphere\HaveIBeenPwned\Services
  */
-class HaveIBeenPwndService
+class HaveIBeenPwnedService
 {
     use Configurable;
 
@@ -36,7 +36,7 @@ class HaveIBeenPwndService
     /**
      * Useragent
      */
-    const USER_AGENT = 'SilverStripe-Firesphere-HaveIBeenPwnd-checker/1.0';
+    const USER_AGENT = 'Firesphere-HaveIBeenPwned-checker/1.0';
 
     /**
      * @config
@@ -56,7 +56,7 @@ class HaveIBeenPwndService
     protected $args;
 
     /**
-     * HaveIBeenPwndService constructor.
+     * HaveIBeenPwnedService constructor.
      * @param array $args
      */
     public function __construct($args = [])

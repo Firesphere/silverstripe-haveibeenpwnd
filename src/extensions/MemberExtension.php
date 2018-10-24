@@ -1,6 +1,6 @@
 <?php
 
-namespace Firesphere\HaveIBeenPwnd\Extensions;
+namespace Firesphere\HaveIBeenPwned\Extensions;
 
 use SilverStripe\Forms\CheckboxField;
 use SilverStripe\Forms\FieldList;
@@ -10,7 +10,7 @@ use SilverStripe\ORM\DataExtension;
 use SilverStripe\Security\Member;
 
 /**
- * Class \Firesphere\HaveIBeenPwnd\Extensions\MemberExtension
+ * Class \Firesphere\HaveIBeenPwned\Extensions\MemberExtension
  *
  * @property Member|MemberExtension $owner
  * @property int $PasswordIsPwnd
@@ -36,7 +36,7 @@ class MemberExtension extends DataExtension
 
         $fields->removeByName(['BreachedSites', 'PasswordIsPwnd']);
         if ($this->owner->BreachedSites || $this->owner->PasswordIsPwnd) {
-            $fields->findOrMakeTab('Root.HaveIBeenPwnd', _t(self::class . '.PWNDTAB', 'Have I Been Pwnd?'));
+            $fields->findOrMakeTab('Root.HaveIBeenPwned', _t(self::class . '.PWNDTAB', 'Have I Been Pwnd?'));
         }
         if ($this->owner->PasswordIsPwnd > 0 || $this->owner->BreachedSites) {
             $text = _t(
@@ -44,20 +44,20 @@ class MemberExtension extends DataExtension
                 'If the error says that you "have been Pwnd", it means your password appears in the <a href="https://haveibeenpwned.com/Privacy">Have I Been Pwnd</a> database. ' .
                 'Therefore, we can not accept your password, because it is insecure or known to have been breached. ' .
                 'Before a password is safely stored in our database, we test if the password has been breached. We do not share your password. ' .
-                'We run a safe test against the HaveIBeenPwnd database to. None of your data is shared or stored at HaveIBeenPwnd. ' .
+                'We run a safe test against the HaveIBeenPwned database to. None of your data is shared or stored at HaveIBeenPwned. ' .
                 'For more information, you can read up on "Password safety", and we strongly recommend installing a password manager if you haven\'t already. ' .
-                'Several options are LastPass, BitWarden and 1Password. These services are also able to test your passwords against the HaveIBeenPwnd database, ' .
+                'Several options are LastPass, BitWarden and 1Password. These services are also able to test your passwords against the HaveIBeenPwned database, ' .
                 'to see if your passwords are secure and safe.<br />' .
                 'Furthermore, <a href="https://www.troyhunt.com/introducing-306-million-freely-downloadable-pwned-passwords/">Troy Hunt explains why and how this service is important</a>.'
             );
 
             $help = LiteralField::create('Helptext', '<p>' . $text . '</p>');
-            $fields->addFieldToTab('Root.HaveIBeenPwnd', $help);
+            $fields->addFieldToTab('Root.HaveIBeenPwned', $help);
         }
 
         if ($this->owner->BreachedSites) {
             $fields->addFieldToTab(
-                'Root.HaveIBeenPwnd',
+                'Root.HaveIBeenPwned',
                 ReadonlyField::create('BreachedSites', _t(self::class . '.BREACHEDSITES', 'Breached sites'))
             );
         }

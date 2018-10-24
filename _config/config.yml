@@ -1,12 +1,12 @@
 ---
-Name: HaveIBeenPwndConfig
+Name: HaveIBeenPwnedConfig
 ---
-Firesphere\HaveIBeenPwnd\Services\HaveIBeenPwndService:
+Firesphere\HaveIBeenPwned\Services\HaveIBeenPwnedService:
   allow_pwnd: false
   save_pwnd: true
 ---
 Only:
   environment: dev
 ---
-Firesphere\HaveIBeenPwnd\Services\HaveIBeenPwndService:
+Firesphere\HaveIBeenPwned\Services\HaveIBeenPwnedService:
   allow_pwnd: true

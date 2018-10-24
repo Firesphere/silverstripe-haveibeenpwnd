@@ -1,9 +1,9 @@
 <?php
 
-namespace Firesphere\HaveIBeenPwnd\Tests;
+namespace Firesphere\HaveIBeenPwned\Tests;
 
-use Firesphere\HaveIBeenPwnd\Controllers\HaveIBeenPwndPageController;
-use Firesphere\HaveIBeenPwnd\Models\HaveIBeenPwndPage;
+use Firesphere\HaveIBeenPwned\Controllers\HaveIBeenPwnedPageController;
+use Firesphere\HaveIBeenPwned\Models\HaveIBeenPwnedPage;
 use GuzzleHttp\Handler\MockHandler;
 use GuzzleHttp\Psr7\Response;
 use SilverStripe\Core\Injector\Injector;
@@ -16,22 +16,22 @@ class HaveIBeenPwndPageControllerTest extends SapphireTest
 {
     public function testClassExists()
     {
-        /** @var HaveIBeenPwndPage $page */
-        $page = Injector::inst()->get(HaveIBeenPwndPage::class);
+        /** @var HaveIBeenPwnedPage $page */
+        $page = Injector::inst()->get(HaveIBeenPwnedPage::class);
 
-        /** @var HaveIBeenPwndPageController $controller */
-        $controller = Injector::inst()->get(HaveIBeenPwndPageController::class, false, [$page]);
+        /** @var HaveIBeenPwnedPageController $controller */
+        $controller = Injector::inst()->get(HaveIBeenPwnedPageController::class, false, [$page]);
 
-        $this->assertInstanceOf(HaveIBeenPwndPageController::class, $controller);
+        $this->assertInstanceOf(HaveIBeenPwnedPageController::class, $controller);
     }
 
     public function testCheckEmail()
     {
-        /** @var HaveIBeenPwndPage $page */
-        $page = Injector::inst()->get(HaveIBeenPwndPage::class);
+        /** @var HaveIBeenPwnedPage $page */
+        $page = Injector::inst()->get(HaveIBeenPwnedPage::class);
 
-        /** @var HaveIBeenPwndPageController $controller */
-        $controller = Injector::inst()->get(HaveIBeenPwndPageController::class, false, [$page]);
+        /** @var HaveIBeenPwnedPageController $controller */
+        $controller = Injector::inst()->get(HaveIBeenPwnedPageController::class, false, [$page]);
 
         // Log out. Solidly I hope
         Security::setCurrentUser(null);
@@ -40,7 +40,7 @@ class HaveIBeenPwndPageControllerTest extends SapphireTest
         $response = $controller->checkEmail(null);
 
         // If there's no user, it should just return itself
-        $this->assertInstanceOf(HaveIBeenPwndPageController::class, $response);
+        $this->assertInstanceOf(HaveIBeenPwnedPageController::class, $response);
 
         $member = Member::create(['Email' => 'test@test.com']);
         Security::setCurrentUser($member);
@@ -51,10 +51,10 @@ class HaveIBeenPwndPageControllerTest extends SapphireTest
             new Response(200, [], $body),
         ]);
 
-        /** @var HaveIBeenPwndPageController $controller */
-        $controller = Injector::inst()->get(HaveIBeenPwndPageController::class, false, [$page]);
+        /** @var HaveIBeenPwnedPageController $controller */
+        $controller = Injector::inst()->get(HaveIBeenPwnedPageController::class, false, [$page]);
 
-        /** @var HaveIBeenPwndPageController $response */
+        /** @var HaveIBeenPwnedPageController $response */
         $response = $controller->checkEmail(null, ['handler' => $mock]);
 
         $this->assertContains('17Media', $response->dataRecord->Content);

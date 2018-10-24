@@ -4,7 +4,7 @@
     "type": "silverstripe-vendormodule",
     "keywords": [
         "silverstripe",
-        "HaveIBeenPwnd",
+        "HaveIBeenPwned",
         "Password"
     ],
     "license": "BSD-3-Clause",
@@ -32,17 +32,31 @@
         },
         "autoload": {
             "psr-4": {
-                "Firesphere\\HaveIBeenPwnd\\Extensions": "src/extensions",
-                "Firesphere\\HaveIBeenPwnd\\Controllers": "src/contrtollers",
-                "Firesphere\\HaveIBeenPwnd\\Models": "src/models",
-                "Firesphere\\HaveIBeenPwnd\\Services": "src/services"
+                "Firesphere\\HaveIBeenPwned\\Extensions": "src/extensions",
+                "Firesphere\\HaveIBeenPwned\\Controllers": "src/contrtollers",
+                "Firesphere\\HaveIBeenPwned\\Models": "src/models",
+                "Firesphere\\HaveIBeenPwned\\Services": "src/services"
             }
         },
         "autoload-dev": {
             "psr-4": {
-                "Firesphere\\HaveIBeenPwnd\\Tests": "tests/unit"
+                "Firesphere\\HaveIBeenPwned\\Tests": "tests/unit"
             }
-        }
+        },
+        "project-files-installed": [
+            "app/.htaccess",
+            "app/_config.php",
+            "app/_config/mysite.yml",
+            "app/src/Page.php",
+            "app/src/PageController.php"
+        ],
+        "public-files-installed": [
+            ".htaccess",
+            "index.php",
+            "install-frameworkmissing.html",
+            "install.php",
+            "web.config"
+        ]
     },
     "prefer-stable": true,
     "minimum-stability": "dev"
