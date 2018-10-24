@@ -38,7 +38,7 @@ class MemberExtensionTest extends SapphireTest
         $this->assertInstanceOf(Tab::class, $fields->fieldByName('Root.HaveIBeenPwned'));
         $this->assertInstanceOf(ReadonlyField::class, $fields->dataFieldByName('BreachedSites'));
 
-        $this->assertContains('Breached sites', $fields->forTemplate());
+        $this->assertContains('Known breaches', $fields->forTemplate());
         $this->assertContains('If the error says that you "have been Pwnd", ', $fields->forTemplate());
     }
 
