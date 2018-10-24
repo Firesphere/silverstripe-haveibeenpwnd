@@ -63,13 +63,7 @@ class LoginHandler extends BaseLoginHandler
         // Also, exclude default admin from forcing a reset
         if (!$isDefaultAdmin && !HaveIBeenPwnedService::config()->get('allow_pwnd')) {
             $password = $data['Password'];
-            $member = null;
-            $identifierField = Member::config()->get('unique_identifier_field');
-            $memberCount = Member::get()->filter([$identifierField => $data['Email']])->count();
-            // There's no need to check for the member if it doesn't exist
-            if ($memberCount !== 0) {
-                $member = $this->checkLogin($data, $request, $result);
-            }
+            $member = $this->checkLogin($data, $request, $result);
 
             // How often can we find this password?
             $breachCount = $this->service->checkPwnedPassword($password);
@@ -79,8 +73,8 @@ class LoginHandler extends BaseLoginHandler
                 $this->lockoutMember($member, $breachCount);
             }
 
-            // A breached member or a non-existing member get the reset form
-            if (($breachCount && $member) || !$memberCount) {
+            if (!$member || $breachCount) {
+                // A breached member or a non-existing member get the reset form
                 return $this->redirectToResetPassword();
             }
         }
