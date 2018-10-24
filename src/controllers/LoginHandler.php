@@ -67,7 +67,7 @@ class LoginHandler extends BaseLoginHandler
             $identifierField = Member::config()->get('unique_identifier_field');
             $memberCount = Member::get()->filter([$identifierField => $data['Email']])->count();
             // There's no need to check for the member if it doesn't exist
-            if ($memberCount) {
+            if ($memberCount !== 0) {
                 $member = $this->checkLogin($data, $request, $result);
             }
 
@@ -91,8 +91,9 @@ class LoginHandler extends BaseLoginHandler
     }
 
     /**
-     * @param $member
-     * @param $breachCount
+     * @param Member $member
+     * @param Int $breachCount
+     * @throws ValidationException
      */
     protected function lockoutMember($member, $breachCount)
     {
