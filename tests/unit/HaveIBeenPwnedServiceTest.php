@@ -29,18 +29,18 @@ class HaveIBeenPwnedServiceTest extends SapphireTest
         // This sets up the mock client to respond to the request it gets
         // with an HTTP 200 containing your mock body.
         $mock = new MockHandler([
-            new Response(123, [], $body),
-            new Response(123, [], $body),
+            new Response(200, [], $body),
+            new Response(200, [], $body),
         ]);
 
         /** @var HaveIBeenPwnedService $service */
         $service = Injector::inst()->createWithArgs(HaveIBeenPwnedService::class, [['handler' => $mock]]);
 
-        $response = $service->checkPwndPassword('123');
+        $response = $service->checkPwnedPassword('123');
 
         $this->assertEquals(1014565, $response);
 
-        $response = $service->checkPwndPassword('abc');
+        $response = $service->checkPwnedPassword('abc');
 
         $this->assertEquals(0, $response);
     }
@@ -51,14 +51,14 @@ class HaveIBeenPwnedServiceTest extends SapphireTest
         // This sets up the mock client to respond to the request it gets
         // with an HTTP 200 containing your mock body.
         $mock = new MockHandler([
-            new Response(123, [], $body),
-            new Response(123, [], '[]'),
+            new Response(200, [], $body),
+            new Response(200, [], '[]'),
         ]);
 
         /** @var HaveIBeenPwnedService $service */
         $service = Injector::inst()->createWithArgs(HaveIBeenPwnedService::class, [['handler' => $mock]]);
 
-        $response = $service->checkPwndEmail($this->member);
+        $response = $service->checkPwnedEmail($this->member);
 
         $this->assertContains(
             '000webhost',
@@ -66,7 +66,7 @@ class HaveIBeenPwnedServiceTest extends SapphireTest
         );
         $this->member->Email = 'nonexisting@realy-i-do-not-exist.random';
 
-        $response = $service->checkPwndEmail($this->member);
+        $response = $service->checkPwnedEmail($this->member);
 
         $this->assertEquals('', $response);
     }

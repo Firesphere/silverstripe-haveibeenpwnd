@@ -58,20 +58,28 @@ class MemberExtension extends DataExtension
         if ($this->owner->BreachedSites) {
             $fields->addFieldToTab(
                 'Root.HaveIBeenPwned',
-                ReadonlyField::create('BreachedSites', _t(self::class . '.BREACHEDSITES', 'Breached sites'))
+                ReadonlyField::create(
+                    'BreachedSites',
+                    _t(self::class . '.BREACHEDSITES', 'Breached sites')
+                )
             );
         }
 
-        $fields->addFieldToTab('Root.Main', $countField = ReadonlyField::create('PasswordIsPwnd', 'Pwnd Count'));
+        $fields->addFieldsToTab('Root.Main', [
+            $countField = ReadonlyField::create(
+                'PasswordIsPwnd',
+                _t(self::class . '.PWNCOUNT', 'Pwnd Count')
+            ),
+            $tmpDisable = CheckboxField::create(
+                'PwndDisabled',
+                _t(self::class . '.TMPDISABLE', 'Disable "Have I Been Pwnd" temporarily')
+            )
+        ]);
         $countField->setDescription(_t(
             self::class . '.AMOUNT',
             'Amount of times the password appears in the Have I Been Pwnd database'
         ));
 
-        $fields->addFieldToTab('Root.Main', $tmpDisable = CheckboxField::create(
-            'PwndDisabled',
-            _t(self::class . '.TMPDISABLE', 'Disable "Have I Been Pwnd" temporarily')
-        ));
         $tmpDisable->setDescription(_t(
             self::class . '.TMPDISABLEDESCR',
             'Allow the password to be a compromised password once (only from the CMS), to reset a users password manually and let the user reset the password on first login.'

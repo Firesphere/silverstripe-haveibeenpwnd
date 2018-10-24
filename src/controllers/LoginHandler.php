@@ -72,7 +72,7 @@ class LoginHandler extends BaseLoginHandler
             }
 
             // How often can we find this password?
-            $breachCount = $this->service->checkPwndPassword($password);
+            $breachCount = $this->service->checkPwnedPassword($password);
 
             // Lockout the member if the breachcount is greater than 0
             if ($member && $breachCount) {
@@ -124,7 +124,7 @@ class LoginHandler extends BaseLoginHandler
             'warning'
         );
 
-        if ($pwndPage) {
+        if ($pwndPage !== null) {
             $lostPasswordForm->sessionMessage(
                 _t(
                     self::class . '.PASSWORDEXPIRYREASON',

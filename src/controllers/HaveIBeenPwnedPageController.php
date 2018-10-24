@@ -45,7 +45,7 @@ class HaveIBeenPwnedPageController extends PageController
             /** @var HaveIBeenPwnedService $service */
             $service = Injector::inst()->createWithArgs(HaveIBeenPwnedService::class, [$params]);
 
-            $breachedEmails = $service->checkPwndEmail($user);
+            $breachedEmails = $service->checkPwnedEmail($user);
 
             $contentText = str_replace("\r\n", '<br />', $breachedEmails);
 

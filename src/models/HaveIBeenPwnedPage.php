@@ -23,6 +23,11 @@ class HaveIBeenPwnedPage extends Page
         return HaveIBeenPwnedPageController::class;
     }
 
+    /**
+     * @param null $member
+     * @param array $context
+     * @return bool
+     */
     public function canCreate($member = null, $context = array())
     {
         // This page should only exist once

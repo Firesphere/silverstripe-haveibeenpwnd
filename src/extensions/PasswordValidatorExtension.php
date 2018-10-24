@@ -43,8 +43,7 @@ class PasswordValidatorExtension extends Extension
             $savePwnd = HaveIBeenPwnedService::config()->get('save_pwnd');
 
             $isPwndCount = $this->checkPwnCount($pwd, $member);
-            $breached = $this->checkPwndSites($member, $savePwnd);
-
+            $breached = $this->checkPwndSites($savePwnd, $member);
 
             // Although it would be stupid, the pwnd check can be disabled
             // Or even allow for breached passwords. Not exactly ideal
@@ -53,17 +52,18 @@ class PasswordValidatorExtension extends Extension
                     'Password',
                     _t(
                         self::class . '.KNOWN',
-                        'Your password appears {times} in the Have I Been Pwnd database',
+                        'Your password appears {times} times in the Have I Been Pwnd database',
                         ['times' => $isPwndCount]
                     )
                 );
                 if ($breached) {
+                    $type = $valid->isValid() ? ValidationResult::TYPE_WARNING : ValidationResult::TYPE_INFO;
                     $message = _t(
                         self::class . '.KNOWNBREACHMESSAGE',
-                        "To help you identify where you have been breached, see the HaveIBeenPwned tab for information"
+                        'To help you identify where you have been breached, see the HaveIBeenPwned tab for information after a successful update of your password'
                     );
 
-                    $valid->addError($message);
+                    $valid->addMessage($message, $type);
                 }
             }
         }
@@ -77,7 +77,7 @@ class PasswordValidatorExtension extends Extension
      */
     protected function checkPwnCount($pwd, $member)
     {
-        $isPwndCount = $this->service->checkPwndPassword($pwd);
+        $isPwndCount = $this->service->checkPwnedPassword($pwd);
 
         // Always set amount of pwd's if it's true
         $member->PasswordIsPwnd = $isPwndCount;
@@ -91,13 +91,12 @@ class PasswordValidatorExtension extends Extension
      * @return string
      * @throws \GuzzleHttp\Exception\GuzzleException
      */
-    protected function checkPwndSites($member, $savePwnd)
+    protected function checkPwndSites($savePwnd, $member)
     {
         $breached = '';
         // If storing the breached sites, check the email as well
         if ($savePwnd) {
-            usleep(2000); // We need to conform to the FUP, max 1 request per 1500ms
-            $breached = $this->service->checkPwndEmail($member);
+            $breached = $this->service->checkPwnedEmail($member);
             $member->BreachedSites = $breached;
         }
 

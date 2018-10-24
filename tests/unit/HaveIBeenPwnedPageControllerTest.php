@@ -57,9 +57,9 @@ class HaveIBeenPwnedPageControllerTest extends SapphireTest
         /** @var HaveIBeenPwnedPageController $response */
         $response = $controller->checkEmail(null, ['handler' => $mock]);
 
-        $this->assertContains('17Media', $response->dataRecord->Content);
+        $this->assertContains('17Media', $response->Content);
 
         // We don't have a full set, so Yahoo shouldn't show
-        $this->assertNotContains('Yahoo', $response->dataRecord->Content);
+        $this->assertNotContains('Yahoo', $response->Content);
     }
 }

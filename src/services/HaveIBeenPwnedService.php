@@ -69,7 +69,7 @@ class HaveIBeenPwnedService
      * @return int
      * @throws GuzzleException
      */
-    public function checkPwndPassword($pwd)
+    public function checkPwnedPassword($pwd)
     {
         $this->args['base_uri'] = static::PWND_API_URL;
 
@@ -114,7 +114,7 @@ class HaveIBeenPwnedService
      * @return string
      * @throws GuzzleException
      */
-    public function checkPwndEmail($member)
+    public function checkPwnedEmail($member)
     {
         $this->args['base_uri'] = static::PWND_URL;
         $uniqueField = Member::config()->get('unique_identifier_field');
