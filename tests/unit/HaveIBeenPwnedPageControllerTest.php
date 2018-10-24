@@ -12,7 +12,7 @@ use SilverStripe\Security\IdentityStore;
 use SilverStripe\Security\Member;
 use SilverStripe\Security\Security;
 
-class HaveIBeenPwndPageControllerTest extends SapphireTest
+class HaveIBeenPwnedPageControllerTest extends SapphireTest
 {
     public function testClassExists()
     {

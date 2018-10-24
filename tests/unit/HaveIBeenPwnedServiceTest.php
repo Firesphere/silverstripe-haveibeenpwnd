@@ -9,7 +9,7 @@ use SilverStripe\Core\Injector\Injector;
 use SilverStripe\Dev\SapphireTest;
 use SilverStripe\Security\Member;
 
-class HaveIBeenPwndServiceTest extends SapphireTest
+class HaveIBeenPwnedServiceTest extends SapphireTest
 {
     protected $member;
 

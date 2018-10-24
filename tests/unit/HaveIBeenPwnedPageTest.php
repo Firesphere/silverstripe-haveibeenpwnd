@@ -15,7 +15,7 @@ use SilverStripe\Dev\SapphireTest;
 use SilverStripe\Security\DefaultAdminService;
 use SilverStripe\Security\Security;
 
-class HaveIBeenPwndPageTest extends SapphireTest
+class HaveIBeenPwnedPageTest extends SapphireTest
 {
     public function testGetControllerName()
     {

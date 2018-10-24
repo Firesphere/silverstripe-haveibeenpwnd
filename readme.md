@@ -28,19 +28,6 @@ This information about the password and the email are unrelated. HaveIBeenPwned 
 
 `composer require firesphere/HaveIBeenPwnd`
 
-# Can I USe
-
-Simply put? Sure. Admitted, this is Open Source software, and in theory, you can use it any way you want.
-
-In reality, this software is copyrighted. If you are an open source project, you can use it the way you like, but if you want to use
-this for a commercial product, it's a bit more complicated. You can license this work, by buying a usage subscription. It will allow you this, and all
-future use of the software.
-
-### But it is licensed BSD!
-
-Yes, it is. But supporting the developer is not just your standard BullShit Doit
-
-
 # Configuration
 
 ```yaml
@@ -86,11 +73,21 @@ Replacing the vendor\namespace\validator with your own Validator namespace and c
 To not make engineers life impossible and allow for using pwnd passwords on local environments in `dev` mode,
 by default, the Pwnd service is turned off in `dev` mode
 
+# Can I USe
+
+Simply put? Sure. Admitted, this is Open Source software, and in theory, you can use it any way you want.
+
+You can license this work, by buying a usage subscription. It will allow you to request support, or just supporting the developer.
+
+### But it is licensed BSD!
+
+Yes, it is and you can use it as such. I'd just appreciate a bit of help every now and then.
+
 # Actual license
 
 This module is published under BSD 3-clause license, although these are not in the actual classes, the license does apply:
 
-http://www.opensource.org/licenses/BSD-2-Clause
+http://www.opensource.org/licenses/BSD-3-Clause
 
 Copyright (c) 2012-NOW(), Simon "Sphere" Erkelens
 
