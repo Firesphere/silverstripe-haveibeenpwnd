@@ -75,6 +75,9 @@ MyVendor\MyNameSpace\MyPasswordValidator:
 
 Replacing the vendor\namespace\validator with your own Validator namespace and classname
 
+By default, if the default PasswordValidator isn't registered, this module will register it
+to make sure the changes are applied. You can override this in your own `_config.php` file.
+
 ## Only environment
 
 To not make engineers life impossible and allow for using pwnd passwords on local environments in `dev` mode,
