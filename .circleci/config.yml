@@ -32,6 +32,7 @@ jobs:
             # fallback to using the latest cache if no exact match is found
             - v2-cache-
       - run: composer install
+      # Manually copy, for some reason
       - run: cp -R vendor/silverstripe/recipe-cms/* .
       - run: composer vendor-expose
       # Save all dependencies to cache
