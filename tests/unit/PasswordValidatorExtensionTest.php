@@ -122,10 +122,7 @@ class PasswordValidatorExtensionTest extends SapphireTest
 
         $extension->updateValidatePassword('1234', $member, $valid, null, ['handler' => $mock]);
 
-        $messages = $valid->getMessages();
-
         $this->assertContains('2fast4u', $member->BreachedSites);
-        $this->assertContains('2fast4u', $messages[1]['message']);
     }
 
     protected function setUp()
