@@ -58,11 +58,12 @@ class MemberExtension extends DataExtension
         if ($this->owner->BreachedSites) {
             $fields->addFieldToTab(
                 'Root.HaveIBeenPwned',
-                ReadonlyField::create(
+                $known = ReadonlyField::create(
                     'BreachedSites',
-                    _t(self::class . '.BREACHEDSITES', 'Breached sites')
+                    _t(self::class . '.BREACHEDSITES', 'Known breaches')
                 )
             );
+            $known->setDescription(_t(self::class . '.BREACHEDDESCRIPTION', 'Sites on which your email address or username has been found in known breaches.'));
         }
 
         $fields->addFieldsToTab('Root.Main', [

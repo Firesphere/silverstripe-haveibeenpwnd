@@ -12,7 +12,7 @@ Users are _actively_ locked out if their password is found to be pwnd and forced
 
 Although it adds to the user security te enforce unique passwords, this module will not prevent any password leaks like the ones used by HaveIBeenPwned.
 
-# Have I Been Pwnd for SilverStripe
+# Have I Been Pwned for SilverStripe
 
 This module checks on password change and login, if the SHA1 of the password appears in the Have I Been Pwnd database.
 
@@ -24,6 +24,12 @@ when it comes to security), the password has already been out in the wild, so th
 
 Only a count of the amount of times the password shows in the database is collected, next to which known breaches contain the users Email or Username.
 This information about the password and the email are unrelated. HaveIBeenPwned does _not_ provide a relation between the two. On purpose.
+
+# Requirements
+
+SilverStripe Framework 4.x
+GuzzleHttp 6.x
+PHP 5.6+
 
 # Installation
 
