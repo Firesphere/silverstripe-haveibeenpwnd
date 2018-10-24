@@ -1,16 +1,16 @@
 <?php
 
-namespace Firesphere\HaveIBeenPwnd\Controllers;
+namespace Firesphere\HaveIBeenPwned\Controllers;
 
-use Firesphere\HaveIBeenPwnd\Models\HaveIBeenPwndPage;
-use Firesphere\HaveIBeenPwnd\Services\HaveIBeenPwndService;
+use Firesphere\HaveIBeenPwned\Models\HaveIBeenPwnedPage;
+use Firesphere\HaveIBeenPwned\Services\HaveIBeenPwnedService;
 use GuzzleHttp\Exception\GuzzleException;
 use SilverStripe\Control\HTTPRequest;
 use SilverStripe\Control\HTTPResponse;
 use SilverStripe\Core\Injector\Injector;
 use SilverStripe\ORM\ValidationException;
-use SilverStripe\ORM\ValidationResult;
 use SilverStripe\Security\Authenticator;
+use SilverStripe\Security\DefaultAdminService;
 use SilverStripe\Security\Member;
 use SilverStripe\Security\MemberAuthenticator\LoginHandler as BaseLoginHandler;
 use SilverStripe\Security\MemberAuthenticator\LostPasswordForm;
@@ -20,13 +20,13 @@ use SilverStripe\Security\Security;
 
 /**
  * Class LoginHandler
- * @package Firesphere\HaveIBeenPwnd\Controllers
+ * @package Firesphere\HaveIBeenPwned\Controllers
  */
 class LoginHandler extends BaseLoginHandler
 {
 
     /**
-     * @var HaveIBeenPwndService
+     * @var HaveIBeenPwnedService
      */
     protected $service;
 
@@ -39,8 +39,8 @@ class LoginHandler extends BaseLoginHandler
      */
     public function __construct($link, MemberAuthenticator $authenticator)
     {
-        /** @var HaveIBeenPwndService service */
-        $this->service = Injector::inst()->get(HaveIBeenPwndService::class);
+        /** @var HaveIBeenPwnedService service */
+        $this->service = Injector::inst()->get(HaveIBeenPwnedService::class);
 
         parent::__construct($link, $authenticator);
     }
@@ -55,40 +55,47 @@ class LoginHandler extends BaseLoginHandler
      */
     public function doLogin($data, MemberLoginForm $form, HTTPRequest $request)
     {
-        $this->extend('beforeLogin');
-        // Successful login
-        /** @var ValidationResult $result */
-        if ($member = $this->checkLogin($data, $request, $result)) {
-            // This is a copy-paste, because we only want to step in if the login itself is successful
-            // We do not want to lock the member out immediately if the password is incorrect anyway
-            // Due to a lack of a `return` option in the current extension, we need to have this copy-paste
-            // before handing over to the parent
-            if (!HaveIBeenPwndService::config()->get('allow_pwnd')) { // Only do this on live environments. Test and Dev should be allowed, saves the engineer a lot of hassle
-                $password = $data['Password'];
+        $isDefaultAdmin = DefaultAdminService::isDefaultAdminCredentials($data['Email'], $data['Password']);
+        // This is a copy-paste, because we only want to step in if the login itself is successful
+        // We do not want to lock the member out immediately if the password is incorrect anyway
+        // Due to a lack of a `return` option in the current extension, we need to have this copy-paste
+        // before handing over to the parent
+        // Also, exclude default admin from forcing a reset
+        if (!$isDefaultAdmin && !HaveIBeenPwnedService::config()->get('allow_pwnd')) {
+            $password = $data['Password'];
+            $member = null;
+            $identifierField = Member::config()->get('unique_identifier_field');
+            $memberCount = Member::get()->filter([$identifierField => $data['Email']])->count();
+            // There's no need to check for the member if it doesn't exist
+            if ($memberCount) {
+                $member = $this->checkLogin($data, $request, $result);
+            }
 
-                $breachCount = $this->service->checkPwndPassword($password);
+            // How often can we find this password?
+            $breachCount = $this->service->checkPwndPassword($password);
 
-                if ($breachCount) {
-                    $this->lockoutMember($data, $breachCount);
+            // Lockout the member if the breachcount is greater than 0
+            if ($member && $breachCount) {
+                $this->lockoutMember($member, $breachCount);
+            }
 
-                    return $this->redirectToResetPassword();
-                }
+            // A breached member or a non-existing member get the reset form
+            if (($breachCount && $member) || !$memberCount) {
+                return $this->redirectToResetPassword();
             }
         }
 
+        // The used password to log in with is okay, and the member exists. Continue on our way
+        // This does, by the way, _not_ guarantee the password is correct!
         return parent::doLogin($data, $form, $request);
     }
 
     /**
-     * @param $data
+     * @param $member
      * @param $breachCount
-     * @throws ValidationException
      */
-    protected function lockoutMember($data, $breachCount)
+    protected function lockoutMember($member, $breachCount)
     {
-        $loginField = Member::config()->get('unique_identifier_field');
-        /** @var Member $member */
-        $member = Member::get()->filter([$loginField => $data['Email']])->first();
         $member->PasswordIsPwnd = $breachCount;
         $member->AutoLoginHash = null;
         $member->PasswordExpiry = '1970-01-01 00:00:00'; // To the beginning of Unixtime it is
@@ -106,11 +113,11 @@ class LoginHandler extends BaseLoginHandler
     {
         $lostPasswordForm = LostPasswordForm::create($this, Authenticator::class, 'lostPasswordForm');
 
-        /** @var HaveIBeenPwndPage $pwndPage */
-        $pwndPage = HaveIBeenPwndPage::get()->first();
+        /** @var HaveIBeenPwnedPage|null $pwndPage */
+        $pwndPage = HaveIBeenPwnedPage::get()->first();
         $lostPasswordForm->sessionMessage(
             _t(
-                static::class . '.PASSWORDEXPIREDORBREACHED',
+                self::class . '.PASSWORDEXPIREDORBREACHED',
                 'Because of security concerns with the password you entered, you need to reset your password. 
                 Do not worry, your account has not been compromised, this is just a precaution'
             ),
@@ -120,7 +127,7 @@ class LoginHandler extends BaseLoginHandler
         if ($pwndPage) {
             $lostPasswordForm->sessionMessage(
                 _t(
-                    static::class . '.PASSWORDEXPIRYREASON',
+                    self::class . '.PASSWORDEXPIRYREASON',
                     '<a href="{link}">You can read more here</a>',
                     ['link' => $pwndPage->Link()]
                 ),
@@ -133,7 +140,7 @@ class LoginHandler extends BaseLoginHandler
     }
 
     /**
-     * @return HaveIBeenPwndService
+     * @return HaveIBeenPwnedService
      */
     public function getService()
     {
@@ -141,7 +148,7 @@ class LoginHandler extends BaseLoginHandler
     }
 
     /**
-     * @param HaveIBeenPwndService $service
+     * @param HaveIBeenPwnedService $service
      * @return LoginHandler
      */
     public function setService($service)

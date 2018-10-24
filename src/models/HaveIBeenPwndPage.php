@@ -1,17 +1,17 @@
 <?php
 
-namespace Firesphere\HaveIBeenPwnd\Models;
+namespace Firesphere\HaveIBeenPwned\Models;
 
-use Firesphere\HaveIBeenPwnd\Controllers\HaveIBeenPwndPageController;
+use Firesphere\HaveIBeenPwned\Controllers\HaveIBeenPwnedPageController;
 use Page;
 
 /**
- * Class \Firesphere\HaveIBeenPwnd\Models\HaveIBeenPwndPage
+ * Class \Firesphere\HaveIBeenPwned\Models\HaveIBeenPwnedPage
  *
  */
-class HaveIBeenPwndPage extends Page
+class HaveIBeenPwnedPage extends Page
 {
-    private static $table_name = 'HaveIBeenPwndPage';
+    private static $table_name = 'HaveIBeenPwnedPage';
 
     /**
      * Get the controller name for this page
@@ -20,7 +20,7 @@ class HaveIBeenPwndPage extends Page
      */
     public function getControllerName()
     {
-        return HaveIBeenPwndPageController::class;
+        return HaveIBeenPwnedPageController::class;
     }
 
     public function canCreate($member = null, $context = array())

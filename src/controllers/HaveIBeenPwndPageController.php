@@ -1,18 +1,20 @@
 <?php
 
-namespace Firesphere\HaveIBeenPwnd\Controllers;
+namespace Firesphere\HaveIBeenPwned\Controllers;
 
-use Firesphere\HaveIBeenPwnd\Services\HaveIBeenPwndService;
+use Firesphere\HaveIBeenPwned\Models\HaveIBeenPwnedPage;
+use Firesphere\HaveIBeenPwned\Services\HaveIBeenPwnedService;
 use PageController;
+use SilverStripe\Control\HTTPRequest;
 use SilverStripe\Core\Injector\Injector;
 use SilverStripe\Security\Member;
 use SilverStripe\Security\Security;
 
 /**
- * Class \Firesphere\HaveIBeenPwnd\Controllers\HaveIBeenPwndPageController
+ * Class \Firesphere\HaveIBeenPwned\Controllers\HaveIBeenPwnedPageController
  *
  */
-class HaveIBeenPwndPageController extends PageController
+class HaveIBeenPwnedPageController extends PageController
 {
     /**
      * @var array
@@ -28,20 +30,20 @@ class HaveIBeenPwndPageController extends PageController
         'check-email' => 'checkEmail',
     ];
 
-
     /**
+     * @param HTTPRequest|null $request
      * @param array $params
      * @return $this
      * @throws \GuzzleHttp\Exception\GuzzleException
      */
-    public function checkEmail(array $params = [])
+    public function checkEmail($request = null, $params = [])
     {
         /** @var Member|null $user */
         $user = Security::getCurrentUser();
 
         if ($user) {
-            /** @var HaveIBeenPwndService $service */
-            $service = Injector::inst()->createWithArgs(HaveIBeenPwndService::class, [$params]);
+            /** @var HaveIBeenPwnedService $service */
+            $service = Injector::inst()->createWithArgs(HaveIBeenPwnedService::class, [$params]);
 
             $breachedEmails = $service->checkPwndEmail($user);
 

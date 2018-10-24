@@ -1,6 +1,6 @@
 ---
-Name: HaveIBeenPwndInjector
+Name: HaveIBeenPwnedInjector
 ---
 SilverStripe\Core\Injector\Injector:
   SilverStripe\Security\MemberAuthenticator\LoginHandler:
-    class: Firesphere\HaveIBeenPwnd\Controllers\LoginHandler
+    class: Firesphere\HaveIBeenPwned\Controllers\LoginHandler

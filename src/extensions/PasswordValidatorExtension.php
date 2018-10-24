@@ -1,17 +1,18 @@
 <?php
 
-namespace Firesphere\HaveIBeenPwnd\Extensions;
+namespace Firesphere\HaveIBeenPwned\Extensions;
 
-use Firesphere\HaveIBeenPwnd\Services\HaveIBeenPwndService;
+use Firesphere\HaveIBeenPwned\Services\HaveIBeenPwnedService;
 use SilverStripe\Core\Config\Configurable;
 use SilverStripe\Core\Extension;
 use SilverStripe\Core\Injector\Injector;
 use SilverStripe\ORM\ValidationResult;
+use SilverStripe\Security\DefaultAdminService;
 use SilverStripe\Security\Member;
 use SilverStripe\Security\PasswordValidator;
 
 /**
- * Class \Firesphere\HaveIBeenPwnd\Extensions\PasswordValidatorExtension
+ * Class \Firesphere\HaveIBeenPwned\Extensions\PasswordValidatorExtension
  *
  * @property PasswordValidator|PasswordValidatorExtension $owner
  */
@@ -20,7 +21,7 @@ class PasswordValidatorExtension extends Extension
     use Configurable;
 
     /**
-     * @var HaveIBeenPwndService
+     * @var HaveIBeenPwnedService
      */
     protected $service;
 
@@ -28,35 +29,39 @@ class PasswordValidatorExtension extends Extension
      * @param string $pwd
      * @param Member $member
      * @param ValidationResult $valid
+     * @param PasswordValidator|array $validator
      * @param array $params
      * @return void
      * @throws \GuzzleHttp\Exception\GuzzleException
      */
-    public function updateValidatePassword($pwd, $member, $valid, $params = [])
+    public function updateValidatePassword($pwd, $member, $valid, $validator = null, $params = [])
     {
-        $this->service = Injector::inst()->createWithArgs(HaveIBeenPwndService::class, [$params]);
+        $this->service = Injector::inst()->createWithArgs(HaveIBeenPwnedService::class, [$params]);
 
-        $allowPwnd = HaveIBeenPwndService::config()->get('allow_pwnd');
-        $savePwnd = HaveIBeenPwndService::config()->get('save_pwnd');
+        if (!$member->PwndDisabled) {
+            $allowPwnd = HaveIBeenPwnedService::config()->get('allow_pwnd');
+            $savePwnd = HaveIBeenPwnedService::config()->get('save_pwnd');
 
-        $isPwndCount = $this->checkPwnCount($pwd, $member, $allowPwnd);
-        $breached = $this->checkPwndSites($member, $savePwnd);
+            $isPwndCount = $this->checkPwnCount($pwd, $member);
+            $breached = $this->checkPwndSites($member, $savePwnd);
 
 
-        // Although it would be stupid, the pwnd check can be disabled
-        // Or even allow for breached passwords. Not exactly ideal
-        if ($isPwndCount && !$allowPwnd) {
-            $valid->addFieldError(
-                'Password',
-                _t(static::class . 'KNOWN', 'Your password appears in the Have I Been Pwnd database')
-            );
-            if ($breached) {
-                $message = _t(
-                    static::class . 'KNOWN_BREACH_PLUS_BREACHES',
-                    "To help you identify where you have been breached, your username or email address appears in the following breaches:\r\n"
+            // Although it would be stupid, the pwnd check can be disabled
+            // Or even allow for breached passwords. Not exactly ideal
+            if ($isPwndCount && !$allowPwnd) {
+                $valid->addFieldError(
+                    'Password',
+                    _t(self::class . '.KNOWN', 'Your password appears {times} in the Have I Been Pwnd database',
+                        ['times' => $isPwndCount])
                 );
+                if ($breached) {
+                    $message = _t(
+                        self::class . '.KNOWNBREACHMESSAGE',
+                        "To help you identify where you have been breached, see the HaveIBeenPwned tab for information"
+                    );
 
-                $valid->addError($message . $breached);
+                    $valid->addError($message);
+                }
             }
         }
     }
@@ -64,19 +69,14 @@ class PasswordValidatorExtension extends Extension
     /**
      * @param $pwd
      * @param $member
-     * @param $allowPwnd
      * @return int
      * @throws \GuzzleHttp\Exception\GuzzleException
      */
-    protected function checkPwnCount($pwd, $member, $allowPwnd)
+    protected function checkPwnCount($pwd, $member)
     {
-        $isPwndCount = 0;
-        // There's no need to check if breaches are allowed, it's a pointless excercise
-        if (!$allowPwnd) {
-            $isPwndCount = $this->service->checkPwndPassword($pwd);
-        }
+        $isPwndCount = $this->service->checkPwndPassword($pwd);
 
-        // Always mark as Pwnd if it's true
+        // Always set amount of pwd's if it's true
         $member->PasswordIsPwnd = $isPwndCount;
 
         return $isPwndCount;
@@ -93,7 +93,7 @@ class PasswordValidatorExtension extends Extension
         $breached = '';
         // If storing the breached sites, check the email as well
         if ($savePwnd) {
-            usleep(1500); // We need to conform to the FUP, max 1 request per 1500ms
+            usleep(2000); // We need to conform to the FUP, max 1 request per 1500ms
             $breached = $this->service->checkPwndEmail($member);
             $member->BreachedSites = $breached;
         }

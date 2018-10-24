@@ -1,7 +1,7 @@
-[![Build Status](https://scrutinizer-ci.com/g/Firesphere/silverstripe-haveibeenpwnd/badges/build.png?b=master)](https://scrutinizer-ci.com/g/Firesphere/silverstripe-haveibeenpwnd/build-status/master)[![codecov](https://codecov.io/gh/Firesphere/silverstripe-haveibeenpwnd/branch/master/graph/badge.svg)](https://codecov.io/gh/Firesphere/silverstripe-haveibeenpwnd)
-[![Maintainability](https://api.codeclimate.com/v1/badges/bfc8d4c5de506318af0b/maintainability)](https://codeclimate.com/github/Firesphere/silverstripe-haveibeenpwnd/maintainability)
-[![Scrutinizer Code Quality](https://scrutinizer-ci.com/g/Firesphere/silverstripe-haveibeenpwnd/badges/quality-score.png?b=master)](https://scrutinizer-ci.com/g/Firesphere/silverstripe-haveibeenpwnd/?branch=master)
-[![Code Intelligence Status](https://scrutinizer-ci.com/g/Firesphere/silverstripe-haveibeenpwnd/badges/code-intelligence.svg?b=master)](https://scrutinizer-ci.com/code-intelligence)
+[![Build Status](https://scrutinizer-ci.com/g/Firesphere/silverstripe-HaveIBeenPwned/badges/build.png?b=master)](https://scrutinizer-ci.com/g/Firesphere/silverstripe-HaveIBeenPwned/build-status/master)[![codecov](https://codecov.io/gh/Firesphere/silverstripe-HaveIBeenPwned/branch/master/graph/badge.svg)](https://codecov.io/gh/Firesphere/silverstripe-HaveIBeenPwned)
+[![Maintainability](https://api.codeclimate.com/v1/badges/bfc8d4c5de506318af0b/maintainability)](https://codeclimate.com/github/Firesphere/silverstripe-HaveIBeenPwned/maintainability)
+[![Scrutinizer Code Quality](https://scrutinizer-ci.com/g/Firesphere/silverstripe-HaveIBeenPwned/badges/quality-score.png?b=master)](https://scrutinizer-ci.com/g/Firesphere/silverstripe-HaveIBeenPwned/?branch=master)
+[![Code Intelligence Status](https://scrutinizer-ci.com/g/Firesphere/silverstripe-HaveIBeenPwned/badges/code-intelligence.svg?b=master)](https://scrutinizer-ci.com/code-intelligence)
 
 # _**WARNING**_
 
@@ -9,24 +9,37 @@ This module is not a replacement for two factor authentication.
 
 Users are _actively_ locked out if their password is found to be pwnd and forced to reset their password.
 
-Although it adds to the user security te enforce unique passwords, this module will not prevent any password leaks like the ones used by HaveIBeenPwnd.
+Although it adds to the user security te enforce unique passwords, this module will not prevent any password leaks like the ones used by HaveIBeenPwned.
 
 # Have I Been Pwnd for SilverStripe
 
 This module checks on password change and login, if the SHA1 of the password appears in the Have I Been Pwnd database.
 
-There is _never_ a full password transmitted to HaveIBeenPwnd, only the first 5 characters of a SHA1 of the password, the response
-from HaveIBeenPwnd is then compared locally.
+There is _never_ a full password transmitted to HaveIBeenPwned, only the first 5 characters of a SHA1 of the password, the response
+from HaveIBeenPwned is then compared locally.
 
-Given the nature of HaveIBeenPwnd, even if a password is intercepted (the connection is HTTPS and Troy Hunt is not the easiest
+Given the nature of HaveIBeenPwned, even if a password is intercepted (the connection is HTTPS and Troy Hunt is not the easiest
 when it comes to security), the password has already been out in the wild, so this scenario is a very unlikely one to cause more breaches.
 
 Only a count of the amount of times the password shows in the database is collected, next to which known breaches contain the users Email or Username.
-This information about the password and the email are unrelated. HaveIBeenPwnd does _not_ provide a relation between the two. On purpose.
+This information about the password and the email are unrelated. HaveIBeenPwned does _not_ provide a relation between the two. On purpose.
 
 # Installation
 
-`composer require firesphere/haveibeenpwnd`
+`composer require firesphere/HaveIBeenPwnd`
+
+# Can I USe
+
+Simply put? Sure. Admitted, this is Open Source software, and in theory, you can use it any way you want.
+
+In reality, this software is copyrighted. If you are an open source project, you can use it the way you like, but if you want to use
+this for a commercial product, it's a bit more complicated. You can license this work, by buying a usage subscription. It will allow you this, and all
+future use of the software.
+
+### But it is licensed BSD!
+
+Yes, it is. But supporting the developer is not just your standard BullShit Doit
+
 
 # Configuration
 
@@ -34,16 +47,16 @@ This information about the password and the email are unrelated. HaveIBeenPwnd d
 
 ---
 Name: MyPwnConfig
-    after: HaveIBeenPwndConfig
+    after: HaveIBeenPwnedConfig
 ---
-Firesphere\HaveIBeenPwnd\Services\HaveIBeenPwndService:
+Firesphere\HaveIBeenPwned\Services\HaveIBeenPwnedService:
   allow_pwnd: false
   save_pwnd: true
 ---
 Only:
   environment: dev
 ---
-Firesphere\HaveIBeenPwnd\Services\HaveIBeenPwndService:
+Firesphere\HaveIBeenPwned\Services\HaveIBeenPwnedService:
   allow_pwnd: true
 
 ```
@@ -62,7 +75,7 @@ Add the following to either of your config yml files. (Suggested is using an `ex
 
 MyVendor\MyNameSpace\MyPasswordValidator:
   extensions:
-    - Firesphere\HaveIBeenPwnd\Extensions\PasswordValidatorExtension
+    - Firesphere\HaveIBeenPwned\Extensions\PasswordValidatorExtension
 
 ```
 
