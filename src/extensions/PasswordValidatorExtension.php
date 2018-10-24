@@ -51,8 +51,11 @@ class PasswordValidatorExtension extends Extension
             if ($isPwndCount && !$allowPwnd) {
                 $valid->addFieldError(
                     'Password',
-                    _t(self::class . '.KNOWN', 'Your password appears {times} in the Have I Been Pwnd database',
-                        ['times' => $isPwndCount])
+                    _t(
+                        self::class . '.KNOWN',
+                        'Your password appears {times} in the Have I Been Pwnd database',
+                        ['times' => $isPwndCount]
+                    )
                 );
                 if ($breached) {
                     $message = _t(
