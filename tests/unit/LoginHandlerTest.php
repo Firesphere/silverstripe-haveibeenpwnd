@@ -60,11 +60,12 @@ class LoginHandlerTest extends SapphireTest
         $body = file_get_contents(__DIR__ . '/../fixtures/pwnd123.txt');
         // This sets up the mock client to respond to the request it gets
         // with an HTTP 200 containing your mock body.
-
         $mock = new MockHandler([
-            new Response(123, [], $body),
-            new Response(123, [], $body),
-            new Response(123, [], $body),
+            new Response(200, [], $body),
+            new Response(200, [], $body),
+            new Response(200, [], $body),
+            new Response(200, [], $body),
+            new Response(200, [], $body),
         ]);
 
         $this->handler->getService()->setArgs(['handler' => $mock]);

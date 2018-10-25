@@ -2,6 +2,7 @@
 
 namespace Firesphere\HaveIBeenPwned\Controllers;
 
+use Firesphere\HaveIBeenPwned\Extensions\MemberExtension;
 use Firesphere\HaveIBeenPwned\Models\HaveIBeenPwnedPage;
 use Firesphere\HaveIBeenPwned\Services\HaveIBeenPwnedService;
 use GuzzleHttp\Exception\GuzzleException;
@@ -9,6 +10,7 @@ use SilverStripe\Control\HTTPRequest;
 use SilverStripe\Control\HTTPResponse;
 use SilverStripe\Core\Injector\Injector;
 use SilverStripe\ORM\ValidationException;
+use SilverStripe\ORM\ValidationResult;
 use SilverStripe\Security\Authenticator;
 use SilverStripe\Security\DefaultAdminService;
 use SilverStripe\Security\Member;
@@ -56,42 +58,38 @@ class LoginHandler extends BaseLoginHandler
     public function doLogin($data, MemberLoginForm $form, HTTPRequest $request)
     {
         $isDefaultAdmin = DefaultAdminService::isDefaultAdminCredentials($data['Email'], $data['Password']);
-        // This is a copy-paste, because we only want to step in if the login itself is successful
-        // We do not want to lock the member out immediately if the password is incorrect anyway
-        // Due to a lack of a `return` option in the current extension, we need to have this copy-paste
-        // before handing over to the parent
-        // Also, exclude default admin from forcing a reset
-        if (!$isDefaultAdmin && !HaveIBeenPwnedService::config()->get('allow_pwnd')) {
-            $password = $data['Password'];
-            $member = null;
-            $identifierField = Member::config()->get('unique_identifier_field');
-            $memberCount = Member::get()->filter([$identifierField => $data['Email']])->count();
-            // There's no need to check for the member if it doesn't exist
-            if ($memberCount !== 0) {
-                $member = $this->checkLogin($data, $request, $result);
-            }
+        /**
+         * @var Member|MemberExtension $member
+         * @var ValidationResult $result
+         */
+        $member = $this->checkLogin($data, $request, $result);
+        $password = $data['Password'];
+        // How often can we find this password?
+        $pwnedPasswordCount = $this->service->checkPwnedPassword($password);
 
-            // How often can we find this password?
-            $breachCount = $this->service->checkPwnedPassword($password);
-
-            // Lockout the member if the breachcount is greater than 0
-            if ($member && $breachCount) {
-                $this->lockoutMember($member, $breachCount);
-            }
-
-            // A breached member or a non-existing member get the reset form
-            if (($breachCount && $member) || !$memberCount) {
-                return $this->redirectToResetPassword();
-            }
+        if ($member && $result->isValid()) {
+            $member->PasswordIsPwnd = $pwnedPasswordCount;
         }
 
-        // The used password to log in with is okay, and the member exists. Continue on our way
-        // This does, by the way, _not_ guarantee the password is correct!
+        // Also, exclude default admin from forcing a reset
+        if (!$isDefaultAdmin &&
+            $pwnedPasswordCount &&
+            !HaveIBeenPwnedService::config()->get('allow_pwnd')
+        ) {
+            if ($member) {
+                $this->lockoutMember($member, $pwnedPasswordCount);
+            }
+            // A breached member or unknown member get the reset form
+            // It's doing both, because otherwise we'd leak data about members being registered
+            return $this->redirectToResetPassword();
+        }
+
+        // The result is invalid or valid, we don't care, go to the parent
         return parent::doLogin($data, $form, $request);
     }
 
     /**
-     * @param Member $member
+     * @param Member|MemberExtension $member
      * @param Int $breachCount
      * @throws ValidationException
      */
