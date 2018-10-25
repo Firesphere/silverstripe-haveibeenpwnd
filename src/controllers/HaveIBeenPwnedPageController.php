@@ -2,7 +2,6 @@
 
 namespace Firesphere\HaveIBeenPwned\Controllers;
 
-use Firesphere\HaveIBeenPwned\Models\HaveIBeenPwnedPage;
 use Firesphere\HaveIBeenPwned\Services\HaveIBeenPwnedService;
 use PageController;
 use SilverStripe\Control\HTTPRequest;

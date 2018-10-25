@@ -76,7 +76,7 @@ class LoginHandler extends BaseLoginHandler
             $pwnedPasswordCount &&
             !HaveIBeenPwnedService::config()->get('allow_pwnd')
         ) {
-            if ($member) {
+            if ($member !== null) {
                 $this->lockoutMember($member, $pwnedPasswordCount);
             }
             // A breached member or unknown member get the reset form

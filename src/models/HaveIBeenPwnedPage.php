@@ -4,6 +4,7 @@ namespace Firesphere\HaveIBeenPwned\Models;
 
 use Firesphere\HaveIBeenPwned\Controllers\HaveIBeenPwnedPageController;
 use Page;
+use SilverStripe\Security\Member;
 
 /**
  * Class \Firesphere\HaveIBeenPwned\Models\HaveIBeenPwnedPage
@@ -24,7 +25,7 @@ class HaveIBeenPwnedPage extends Page
     }
 
     /**
-     * @param null $member
+     * @param null|Member $member
      * @param array $context
      * @return bool
      */

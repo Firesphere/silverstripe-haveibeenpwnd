@@ -65,7 +65,8 @@ class MemberExtension extends DataExtension
                     _t(self::class . '.BREACHEDSITES', 'Known breaches')
                 )
             );
-            $known->setDescription(_t(self::class . '.BREACHEDDESCRIPTION', 'Sites on which your email address or username has been found in known breaches.'));
+            $known->setDescription(_t(self::class . '.BREACHEDDESCRIPTION',
+                'Sites on which your email address or username has been found in known breaches.'));
         }
 
         $fields->addFieldsToTab('Root.Main', [
