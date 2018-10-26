@@ -1,6 +1,6 @@
 {
     "name": "firesphere/haveibeenpwnd",
-    "description": "Check if a user password is found in the Have I Been Pwnd database.",
+    "description": "Check if a user password is found in the Have I Been Pwned database.",
     "type": "silverstripe-vendormodule",
     "keywords": [
         "silverstripe",
@@ -28,7 +28,7 @@
     },
     "extra": {
         "branch-alias": {
-            "1.x-dev": "1.0.x-dev",
+            "1.x-dev": "1.1.x-dev",
             "dev-master": "1.x-dev"
         },
         "autoload": {

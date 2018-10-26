@@ -78,12 +78,16 @@ class HaveIBeenPwnedService
         $shaEnd = substr($sha, 5);
         /** @var Client $client */
         $client = Injector::inst()->createWithArgs(Client::class, [$this->args]);
-        $result = $client->request('GET', 'range/' . $shaStart, [
-            'headers' => [
-                'user-agent'  => static::USER_AGENT,
-                'api-version' => static::API_VERSION
+        $result = $client->request(
+            'GET',
+            'range/' . $shaStart,
+            [
+                'headers' => [
+                    'user-agent'  => static::USER_AGENT,
+                    'api-version' => static::API_VERSION
+                ]
             ]
-        ]);
+        );
 
         return $this->checkList($result, $shaEnd);
     }
@@ -123,12 +127,16 @@ class HaveIBeenPwnedService
         /** @var Client $client */
         $client = Injector::inst()->createWithArgs(Client::class, [$this->args]);
 
-        $result = $client->request('GET', 'breachedaccount/' . $account . '?truncateResponse=true', [
-            'headers' => [
-                'user-agent'  => static::USER_AGENT,
-                'api-version' => static::API_VERSION
+        $result = $client->request(
+            'GET',
+            'breachedaccount/' . $account . '?truncateResponse=true',
+            [
+                'headers' => [
+                    'user-agent'  => static::USER_AGENT,
+                    'api-version' => static::API_VERSION
+                ]
             ]
-        ]);
+        );
 
         return $this->checkBreaches($result);
     }
