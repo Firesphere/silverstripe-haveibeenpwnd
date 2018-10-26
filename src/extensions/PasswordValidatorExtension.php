@@ -25,17 +25,21 @@ class PasswordValidatorExtension extends Extension
     protected $service;
 
     /**
+     * @var array
+     */
+    protected $params = [];
+
+    /**
      * @param string $pwd
-     * @param Member $member
+     * @param Member|MemberExtension $member
      * @param ValidationResult $valid
      * @param PasswordValidator|array $validator
-     * @param array $params
      * @return void
      * @throws \GuzzleHttp\Exception\GuzzleException
      */
-    public function updateValidatePassword($pwd, $member, $valid, $validator = null, $params = [])
+    public function updateValidatePassword($pwd, $member, $valid, $validator = null)
     {
-        $this->service = Injector::inst()->createWithArgs(HaveIBeenPwnedService::class, [$params]);
+        $this->service = Injector::inst()->createWithArgs(HaveIBeenPwnedService::class, [$this->params]);
 
         if (!$member->PwndDisabled) {
             $allowPwnd = HaveIBeenPwnedService::config()->get('allow_pwnd');
@@ -47,23 +51,7 @@ class PasswordValidatorExtension extends Extension
             // Although it would be stupid, the pwnd check can be disabled
             // Or even allow for breached passwords. Not exactly ideal
             if ($isPwndCount && !$allowPwnd) {
-                $valid->addFieldError(
-                    'Password',
-                    _t(
-                        self::class . '.KNOWN',
-                        'Your password appears {times} times in the Have I Been Pwnd database',
-                        ['times' => $isPwndCount]
-                    )
-                );
-                if ($breached) {
-                    $type = $valid->isValid() ? ValidationResult::TYPE_WARNING : ValidationResult::TYPE_INFO;
-                    $message = _t(
-                        self::class . '.KNOWNBREACHMESSAGE',
-                        'To help you identify where you have been breached, see the HaveIBeenPwned tab for information after a successful update of your password'
-                    );
-
-                    $valid->addMessage($message, $type);
-                }
+                $this->addMessages($valid, $isPwndCount, $breached);
             }
         }
     }
@@ -100,5 +88,47 @@ class PasswordValidatorExtension extends Extension
         }
 
         return $breached;
+    }
+
+    /**
+     * @return array
+     */
+    public function getParams()
+    {
+        return $this->params;
+    }
+
+    /**
+     * @param array $params
+     */
+    public function setParams($params)
+    {
+        $this->params = $params;
+    }
+
+    /**
+     * @param ValidationResult $valid
+     * @param int $isPwndCount
+     * @param string $breached
+     */
+    protected function addMessages($valid, $isPwndCount, $breached)
+    {
+        $valid->addFieldError(
+            'Password',
+            _t(
+                self::class . '.KNOWN',
+                'Your password appears {times} times in the Have I Been Pwnd database',
+                ['times' => $isPwndCount]
+            )
+        );
+        if ($breached) {
+            $type = $valid->isValid() ? ValidationResult::TYPE_WARNING : ValidationResult::TYPE_INFO;
+            $message = _t(
+                self::class . '.KNOWNBREACHMESSAGE',
+                'To help you identify where you have been breached, see the HaveIBeenPwned tab for information after a successful update of your password'
+            );
+
+            $valid->addMessage($message, $type);
+        }
     }
 }

@@ -44,10 +44,35 @@ class MemberExtension extends DataExtension
         $this->owner->PwndDisabled = false;
 
         $fields->removeByName(['BreachedSites', 'PasswordIsPwnd']);
+        $this->breachFound($fields);
+
+        $this->breachedSites($fields);
+
+        $fields->addFieldsToTab('Root.Main', [
+            ReadonlyField::create(
+                'PasswordIsPwnd',
+                _t(self::class . '.PWNCOUNT', 'Pwnd Count')
+            )->setDescription(_t(
+                self::class . '.AMOUNT',
+                'Amount of times the password appears in the Have I Been Pwnd database'
+            )),
+            CheckboxField::create(
+                'PwndDisabled',
+                _t(self::class . '.TMPDISABLE', 'Disable "Have I Been Pwnd" temporarily')
+            )->setDescription(_t(
+                self::class . '.TMPDISABLEDESCR',
+                'Allow the password to be a compromised password once (only from the CMS), to reset a users password manually and let the user reset the password on first login.'
+            ))
+        ]);
+    }
+
+    /**
+     * @param FieldList $fields
+     */
+    protected function breachFound(FieldList $fields)
+    {
         if ($this->owner->BreachedSites || $this->owner->PasswordIsPwnd) {
             $fields->findOrMakeTab('Root.HaveIBeenPwned', _t(self::class . '.PWNDTAB', 'Have I Been Pwnd?'));
-        }
-        if ($this->owner->PasswordIsPwnd > 0 || $this->owner->BreachedSites) {
             $text = _t(
                 self::class . '.PWNDHelp',
                 $this->fallbackHelp
@@ -56,39 +81,24 @@ class MemberExtension extends DataExtension
             $help = LiteralField::create('Helptext', '<p>' . $text . '</p>');
             $fields->addFieldToTab('Root.HaveIBeenPwned', $help);
         }
+    }
 
+    /**
+     * @param FieldList $fields
+     */
+    protected function breachedSites(FieldList $fields)
+    {
         if ($this->owner->BreachedSites) {
             $fields->addFieldToTab(
                 'Root.HaveIBeenPwned',
-                $known = ReadonlyField::create(
+                ReadonlyField::create(
                     'BreachedSites',
                     _t(self::class . '.BREACHEDSITES', 'Known breaches')
-                )
+                )->setDescription(_t(
+                    self::class . '.BREACHEDDESCRIPTION',
+                    'Sites on which your email address or username has been found in known breaches.'
+                ))
             );
-            $known->setDescription(_t(
-                self::class . '.BREACHEDDESCRIPTION',
-                'Sites on which your email address or username has been found in known breaches.'
-            ));
         }
-
-        $fields->addFieldsToTab('Root.Main', [
-            $countField = ReadonlyField::create(
-                'PasswordIsPwnd',
-                _t(self::class . '.PWNCOUNT', 'Pwnd Count')
-            ),
-            $tmpDisable = CheckboxField::create(
-                'PwndDisabled',
-                _t(self::class . '.TMPDISABLE', 'Disable "Have I Been Pwnd" temporarily')
-            )
-        ]);
-        $countField->setDescription(_t(
-            self::class . '.AMOUNT',
-            'Amount of times the password appears in the Have I Been Pwnd database'
-        ));
-
-        $tmpDisable->setDescription(_t(
-            self::class . '.TMPDISABLEDESCR',
-            'Allow the password to be a compromised password once (only from the CMS), to reset a users password manually and let the user reset the password on first login.'
-        ));
     }
 }
