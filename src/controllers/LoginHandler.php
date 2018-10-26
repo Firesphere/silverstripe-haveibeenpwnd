@@ -62,14 +62,7 @@ class LoginHandler extends BaseLoginHandler
          * @var Member|MemberExtension $member
          * @var ValidationResult $result
          */
-        $member = $this->checkLogin($data, $request, $result);
-        $password = $data['Password'];
-        // How often can we find this password?
-        $pwnedPasswordCount = $this->service->checkPwnedPassword($password);
-
-        if ($member && $result->isValid()) {
-            $member->PasswordIsPwnd = $pwnedPasswordCount;
-        }
+        list($member, $pwnedPasswordCount) = $this->validateMember($data, $request, $result);
 
         // Also, exclude default admin from forcing a reset
         if (!$isDefaultAdmin &&
@@ -155,5 +148,26 @@ class LoginHandler extends BaseLoginHandler
         $this->service = $service;
 
         return $this;
+    }
+
+    /**
+     * @param array $data
+     * @param HTTPRequest $request
+     * @param ValidationResult|null $result
+     * @return array
+     * @throws GuzzleException
+     */
+    protected function validateMember($data, HTTPRequest $request, &$result)
+    {
+        $member = $this->checkLogin($data, $request, $result);
+        $password = $data['Password'];
+        // How often can we find this password?
+        $pwnedPasswordCount = $this->service->checkPwnedPassword($password);
+
+        if ($member && $result->isValid()) {
+            $member->PasswordIsPwnd = $pwnedPasswordCount;
+        }
+
+        return [$member, $pwnedPasswordCount];
     }
 }

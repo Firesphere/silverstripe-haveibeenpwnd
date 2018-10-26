@@ -33,11 +33,10 @@ class PasswordValidatorExtension extends Extension
      * @param string $pwd
      * @param Member|MemberExtension $member
      * @param ValidationResult $valid
-     * @param PasswordValidator|array $validator
      * @return void
      * @throws \GuzzleHttp\Exception\GuzzleException
      */
-    public function updateValidatePassword($pwd, $member, $valid, $validator = null)
+    public function updateValidatePassword($pwd, $member, $valid)
     {
         $this->service = Injector::inst()->createWithArgs(HaveIBeenPwnedService::class, [$this->params]);
 

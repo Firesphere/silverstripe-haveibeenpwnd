@@ -8,12 +8,25 @@ use GuzzleHttp\Handler\MockHandler;
 use GuzzleHttp\Psr7\Response;
 use SilverStripe\Core\Config\Config;
 use SilverStripe\Core\Injector\Injector;
+use SilverStripe\Dev\Debug;
 use SilverStripe\Dev\SapphireTest;
 use SilverStripe\ORM\ValidationResult;
 use SilverStripe\Security\Member;
 
 class PasswordValidatorExtensionTest extends SapphireTest
 {
+
+    public function testGetSetParams()
+    {
+        $mock = ['handler' => []];
+
+        /** @var PasswordValidatorExtension $extension */
+        $extension = Injector::inst()->get(PasswordValidatorExtension::class);
+        $extension->setParams($mock);
+
+        $this->assertEquals($mock, $extension->getParams());
+    }
+
     public function testUpdateValidatePasswordAllowAll()
     {
         Config::modify()->set(HaveIBeenPwnedService::class, 'allow_pwnd', true);
