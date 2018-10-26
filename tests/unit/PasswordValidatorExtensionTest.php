@@ -47,7 +47,7 @@ class PasswordValidatorExtensionTest extends SapphireTest
         $member = Member::create();
         /** @var ValidationResult $valid */
         $valid = ValidationResult::create();
-        $extension->updateValidatePassword('123', $member, $valid, null);
+        $extension->updateValidatePassword('123', $member, $valid);
 
         $this->assertTrue($valid->isValid());
         $this->assertEquals(1014565, $member->PasswordIsPwnd);
@@ -62,7 +62,7 @@ class PasswordValidatorExtensionTest extends SapphireTest
         $member = Member::create(['PwndDisabled' => 'true']);
         /** @var ValidationResult $valid */
         $valid = ValidationResult::create();
-        $extension->updateValidatePassword('password', $member, $valid, null);
+        $extension->updateValidatePassword('password', $member, $valid);
 
         $this->assertTrue($valid->isValid());
         $this->assertEquals(0, $member->PasswordIsPwnd);
@@ -89,7 +89,7 @@ class PasswordValidatorExtensionTest extends SapphireTest
         ]);
 
         $extension->setParams(['handler' => $mock]);
-        $extension->updateValidatePassword('123', $member, $valid, null);
+        $extension->updateValidatePassword('123', $member, $valid);
 
         $this->assertFalse($valid->isValid());
     }
@@ -118,7 +118,7 @@ class PasswordValidatorExtensionTest extends SapphireTest
         ]);
 
         $extension->setParams(['handler' => $mock]);
-        $extension->updateValidatePassword('1234', $member, $valid, null);
+        $extension->updateValidatePassword('1234', $member, $valid);
 
         $messages = $valid->getMessages();
 
@@ -136,7 +136,7 @@ class PasswordValidatorExtensionTest extends SapphireTest
         ]);
 
         $extension->setParams(['handler' => $mock]);
-        $extension->updateValidatePassword('1234', $member, $valid, null);
+        $extension->updateValidatePassword('1234', $member, $valid);
 
         $this->assertContains('2fast4u', $member->BreachedSites);
     }
