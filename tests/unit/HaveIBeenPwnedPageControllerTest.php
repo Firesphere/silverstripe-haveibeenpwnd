@@ -37,7 +37,7 @@ class HaveIBeenPwnedPageControllerTest extends SapphireTest
         Security::setCurrentUser(null);
         Injector::inst()->get(IdentityStore::class)->logOut();
 
-        $response = $controller->checkEmail(null);
+        $response = $controller->checkEmail();
 
         // If there's no user, it should just return itself
         $this->assertInstanceOf(HaveIBeenPwnedPageController::class, $response);
@@ -52,7 +52,7 @@ class HaveIBeenPwnedPageControllerTest extends SapphireTest
         ]);
 
         /** @var HaveIBeenPwnedPageController $controller */
-        $controller = Injector::inst()->get(HaveIBeenPwnedPageController::class, false, [$page]);
+        $controller = Injector::inst()->get(HaveIBeenPwnedPageController::class, true, [$page]);
 
         /** @var HaveIBeenPwnedPageController $response */
         $response = $controller->checkEmail(null, ['handler' => $mock]);

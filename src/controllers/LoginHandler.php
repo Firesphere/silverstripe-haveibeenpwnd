@@ -91,7 +91,7 @@ class LoginHandler extends BaseLoginHandler
         $member->PasswordIsPwnd = $breachCount;
         $member->AutoLoginHash = null;
         $member->PasswordExpiry = '1970-01-01 00:00:00'; // To the beginning of Unixtime it is
-        $member->Password = null;
+        $member->Password = null; // And reset the password to prevent any visitor to log in again
         $member->write();
     }
 
@@ -159,6 +159,7 @@ class LoginHandler extends BaseLoginHandler
      */
     protected function validateMember($data, HTTPRequest $request, &$result)
     {
+        /** @var Member|MemberExtension $member */
         $member = $this->checkLogin($data, $request, $result);
         $password = $data['Password'];
         // How often can we find this password?

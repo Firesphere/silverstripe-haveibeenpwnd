@@ -4,7 +4,6 @@ namespace Firesphere\HaveIBeenPwned\Controllers;
 
 use Firesphere\HaveIBeenPwned\Services\HaveIBeenPwnedService;
 use PageController;
-use SilverStripe\Control\HTTPRequest;
 use SilverStripe\Core\Injector\Injector;
 use SilverStripe\Security\Member;
 use SilverStripe\Security\Security;
@@ -30,7 +29,7 @@ class HaveIBeenPwnedPageController extends PageController
     ];
 
     /**
-     * @param HTTPRequest|null $request
+     * @param null $request
      * @param array $params
      * @return $this
      * @throws \GuzzleHttp\Exception\GuzzleException
@@ -48,7 +47,12 @@ class HaveIBeenPwnedPageController extends PageController
 
             $contentText = str_replace("\r\n", '<br />', $breachedEmails);
 
-            $this->dataRecord->Content .= '<p>' . $contentText . '</p>';
+
+            $this->data()->Content = trim(
+                $this->data()->Content . '<p><h3>We found the following breaches for your account:</h3>' .
+                $contentText .
+                '</p>'
+            );
         }
 
         return $this;
