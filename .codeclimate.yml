@@ -1,11 +1,11 @@
 ---
-engines:
+version: 2
+plugins:
   duplication:
     enabled: true
     config:
       languages:
       - php
-plugins:
   phpcodesniffer:
     enabled: true
   fixme:
@@ -14,9 +14,6 @@ plugins:
     enabled: true
   sonar-php:
     enabled: true
-ratings:
-  paths:
-  - "**.php"
-exclude_paths:
-- docs/*
-- tests/*
+exclude_patterns:
+  - docs/*
+  - tests/*
