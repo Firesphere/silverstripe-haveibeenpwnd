@@ -15,7 +15,6 @@ use SilverStripe\Security\Member;
 
 class PasswordValidatorExtensionTest extends SapphireTest
 {
-
     public function testGetSetParams()
     {
         $mock = ['handler' => []];
