@@ -5,9 +5,14 @@ engines:
     config:
       languages:
       - php
+plugins:
+  phpcodesniffer:
+    enabled: true
   fixme:
     enabled: true
   phpmd:
+    enabled: true
+  sonar-php:
     enabled: true
 ratings:
   paths:
