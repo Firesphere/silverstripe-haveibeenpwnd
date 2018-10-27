@@ -4,6 +4,7 @@ namespace Firesphere\HaveIBeenPwned\Controllers;
 
 use Firesphere\HaveIBeenPwned\Services\HaveIBeenPwnedService;
 use PageController;
+use SilverStripe\Control\HTTPRequest;
 use SilverStripe\Core\Injector\Injector;
 use SilverStripe\Security\Member;
 use SilverStripe\Security\Security;
@@ -29,7 +30,7 @@ class HaveIBeenPwnedPageController extends PageController
     ];
 
     /**
-     * @param null $request
+     * @param null|HTTPRequest $request
      * @param array $params
      * @return $this
      * @throws \GuzzleHttp\Exception\GuzzleException
@@ -39,7 +40,7 @@ class HaveIBeenPwnedPageController extends PageController
         /** @var Member|null $user */
         $user = Security::getCurrentUser();
 
-        if ($user) {
+        if ($user !== null) {
             /** @var HaveIBeenPwnedService $service */
             $service = Injector::inst()->createWithArgs(HaveIBeenPwnedService::class, [$params]);
 
