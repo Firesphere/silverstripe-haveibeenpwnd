@@ -34,7 +34,7 @@
         "autoload": {
             "psr-4": {
                 "Firesphere\\HaveIBeenPwned\\Extensions": "src/extensions",
-                "Firesphere\\HaveIBeenPwned\\Controllers": "src/contrtollers",
+                "Firesphere\\HaveIBeenPwned\\Controllers": "src/controllers",
                 "Firesphere\\HaveIBeenPwned\\Models": "src/models",
                 "Firesphere\\HaveIBeenPwned\\Services": "src/services"
             }
