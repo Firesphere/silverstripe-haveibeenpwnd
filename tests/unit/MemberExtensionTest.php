@@ -4,6 +4,7 @@ namespace Firesphere\HaveIBeenPwned\Tests;
 
 use Firesphere\HaveIBeenPwned\Extensions\MemberExtension;
 use SilverStripe\Core\Injector\Injector;
+use SilverStripe\Dev\Debug;
 use SilverStripe\Dev\SapphireTest;
 use SilverStripe\Forms\CheckboxField;
 use SilverStripe\Forms\ReadonlyField;
@@ -22,8 +23,12 @@ class MemberExtensionTest extends SapphireTest
         $fields = $this->member->getCMSFields();
 
         $this->assertInstanceOf(ReadonlyField::class, $fields->dataFieldByName('PasswordIsPwnd'));
-        $this->assertNotContains('If the error says that you "have been Pwnd", ', $fields->forTemplate());
         $this->assertNull($fields->fieldByName('Root.HaveIBeenPwned'));
+        $this->assertNull(
+            $fields->findOrMakeTab('Root.HaveIBeenPwned')
+            ->Fields()
+            ->fieldByName('Helptext')
+        );
         $this->assertInstanceOf(CheckboxField::class, $fields->dataFieldByName('PwndDisabled'));
 
         $this->member->BreachedSites = '000error, test';
@@ -38,8 +43,22 @@ class MemberExtensionTest extends SapphireTest
         $this->assertInstanceOf(Tab::class, $fields->fieldByName('Root.HaveIBeenPwned'));
         $this->assertInstanceOf(ReadonlyField::class, $fields->dataFieldByName('BreachedSites'));
 
-        $this->assertContains('Known breaches', $fields->forTemplate());
-        $this->assertContains('If the error says that you "have been Pwnd", ', $fields->forTemplate());
+        $this->assertNotNull($fields->dataFieldByName('BreachedSites'));
+        $this->assertEquals('Known breaches', $fields->dataFieldByName('BreachedSites')->Title());
+
+        $this->assertNotNull(
+            $fields->findOrMakeTab('Root.HaveIBeenPwned')
+            ->Fields()
+            ->fieldByName('Helptext')
+        );
+
+        $this->assertContains(
+            'If the error says that you "have been Pwnd", ',
+            $fields->findOrMakeTab('Root.HaveIBeenPwned')
+            ->Fields()
+            ->fieldByName('Helptext')
+            ->getContent()
+        );
     }
 
     protected function setUp()

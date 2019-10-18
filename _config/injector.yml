@@ -4,3 +4,6 @@ Name: HaveIBeenPwnedInjector
 SilverStripe\Core\Injector\Injector:
   SilverStripe\Security\MemberAuthenticator\LoginHandler:
     class: Firesphere\HaveIBeenPwned\Controllers\LoginHandler
+  Firesphere\HaveIBeenPwned\Services\HaveIBeenPwnedService:
+    properties:
+      hibp_api_key: '`HIBP_API_KEY`'

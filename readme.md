@@ -37,6 +37,14 @@ PHP 5.6+
 
 # Configuration
 
+Making calls to the Have I Been Pwned API requires a key. There's [a full blog post on why here](https://www.troyhunt.com/authentication-and-the-have-i-been-pwned-api).
+
+To configure this module to use the key, define an environment variable on your server or your .env:
+
+```ini
+HIBP_API_KEY="deadbeeff33df00ddeadbeeff33df00d"
+```
+
 ```yaml
 
 ---
