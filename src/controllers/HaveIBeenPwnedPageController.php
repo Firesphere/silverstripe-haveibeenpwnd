@@ -9,6 +9,11 @@ use SilverStripe\Core\Injector\Injector;
 use SilverStripe\Security\Member;
 use SilverStripe\Security\Security;
 
+// This controller should not be initiated if the base Page doesn't exist
+if (!class_exists('\Page')) {
+    return;
+}
+
 /**
  * Class \Firesphere\HaveIBeenPwned\Controllers\HaveIBeenPwnedPageController
  *
