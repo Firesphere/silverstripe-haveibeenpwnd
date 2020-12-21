@@ -6,6 +6,11 @@ use Firesphere\HaveIBeenPwned\Controllers\HaveIBeenPwnedPageController;
 use Page;
 use SilverStripe\Security\Member;
 
+// This page should not be instantiated if the Page class doesn't exist.
+if (!class_exists('\Page')) {
+    return;
+}
+
 /**
  * Class \Firesphere\HaveIBeenPwned\Models\HaveIBeenPwnedPage
  *
