@@ -21,7 +21,7 @@ class HaveIBeenPwnedService
     /**
      * Api endpoint emails
      */
-    const PWND_URL = 'https://haveibeenpwned.com/api/';
+    const PWND_URL = 'https://haveibeenpwned.com/api/v3/';
 
     /**
      * API endpoint passwords
@@ -31,7 +31,7 @@ class HaveIBeenPwnedService
     /**
      * API Version
      */
-    const API_VERSION = '2';
+    const API_VERSION = '3';
 
     /**
      * Useragent
@@ -72,7 +72,7 @@ class HaveIBeenPwnedService
     public function checkPwnedPassword($pwd)
     {
         $this->args['base_uri'] = static::PWND_API_URL;
-
+        $api_key = $this->hibp_api_key;
         $sha = sha1($pwd);
         $shaStart = substr($sha, 0, 5);
         $shaEnd = substr($sha, 5);
@@ -84,7 +84,8 @@ class HaveIBeenPwnedService
             [
                 'headers' => [
                     'user-agent'  => static::USER_AGENT,
-                    'api-version' => static::API_VERSION
+                    'api-version' => static::API_VERSION,
+                    'hibp-api-key' => $api_key
                 ]
             ]
         );
@@ -121,6 +122,7 @@ class HaveIBeenPwnedService
     public function checkPwnedEmail($member)
     {
         $this->args['base_uri'] = static::PWND_URL;
+        $api_key = $this->hibp_api_key;
         $uniqueField = Member::config()->get('unique_identifier_field');
         $account = $member->{$uniqueField};
 
@@ -133,7 +135,8 @@ class HaveIBeenPwnedService
             [
                 'headers' => [
                     'user-agent'  => static::USER_AGENT,
-                    'api-version' => static::API_VERSION
+                    'api-version' => static::API_VERSION,
+                    'hibp-api-key' => $api_key
                 ]
             ]
         );
