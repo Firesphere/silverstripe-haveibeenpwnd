@@ -17,7 +17,7 @@
     "require": {
         "php": ">=5.6.0",
         "silverstripe/framework": "^4",
-        "guzzlehttp/guzzle": "^6"
+        "guzzlehttp/guzzle": "^6|^7"
     },
     "require-dev": {
         "scriptfusion/phpunit-immediate-exception-printer": "^1",
