@@ -37,6 +37,16 @@ PHP 5.6+
 
 # Configuration
 
+
+Making calls to the Have I Been Pwned API requires a key. There's [a full blog post on why here](https://www.troyhunt.com/authentication-and-the-have-i-been-pwned-api).
+
+To configure this module to use the key, define an environment variable on your server or your .env:
+
+```dotenv
+HIBP_API_KEY="MYAPIKEY1234567898765431"
+```
+
+Other configurations can be done in YML:
 ```yaml
 
 ---
@@ -52,7 +62,6 @@ Only:
 ---
 Firesphere\HaveIBeenPwned\Services\HaveIBeenPwnedService:
   allow_pwnd: true
-
 ```
 
 ## Parameters

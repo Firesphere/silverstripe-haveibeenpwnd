@@ -22,7 +22,12 @@ class MemberExtensionTest extends SapphireTest
         $fields = $this->member->getCMSFields();
 
         $this->assertInstanceOf(ReadonlyField::class, $fields->dataFieldByName('PasswordIsPwnd'));
-        $this->assertNotContains('If the error says that you "have been Pwnd", ', $fields->forTemplate());
+        $this->assertNull($fields->fieldByName('Root.HaveIBeenPwned'));
+        $this->assertNull(
+            $fields->findOrMakeTab('Root.HaveIBeenPwned')
+                ->Fields()
+                ->fieldByName('Helptext')
+        );
         $this->assertNull($fields->fieldByName('Root.HaveIBeenPwned'));
         $this->assertInstanceOf(CheckboxField::class, $fields->dataFieldByName('PwndDisabled'));
 
@@ -38,9 +43,23 @@ class MemberExtensionTest extends SapphireTest
         $this->assertInstanceOf(Tab::class, $fields->fieldByName('Root.HaveIBeenPwned'));
         $this->assertInstanceOf(ReadonlyField::class, $fields->dataFieldByName('BreachedSites'));
 
-        $this->assertContains('Known breaches', $fields->forTemplate());
+        $this->assertNotNull($fields->dataFieldByName('BreachedSites'));
         $this->assertContains('If the error says that you "have been Pwnd", ', $fields->forTemplate());
-    }
+        $this->assertEquals('Known breaches', $fields->dataFieldByName('BreachedSites')->Title());
+
+        $this->assertNotNull(
+            $fields->findOrMakeTab('Root.HaveIBeenPwned')
+                ->Fields()
+                ->fieldByName('Helptext')
+        );
+
+        $this->assertContains(
+            'If the error says that you "have been Pwnd", ',
+            $fields->findOrMakeTab('Root.HaveIBeenPwned')
+                ->Fields()
+                ->fieldByName('Helptext')
+                ->getContent()
+        );    }
 
     protected function setUp()
     {

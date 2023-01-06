@@ -11,6 +11,7 @@ use SilverStripe\Control\Controller;
 use SilverStripe\Control\HTTPRequest;
 use SilverStripe\Control\Session;
 use SilverStripe\Core\Config\Config;
+use SilverStripe\Core\Environment;
 use SilverStripe\Core\Injector\Injector;
 use SilverStripe\Dev\SapphireTest;
 use SilverStripe\Security\Authenticator;
@@ -119,12 +120,25 @@ class LoginHandlerTest extends SapphireTest
         $this->assertContains('You can read more here', $passwordForm->getMessage());
 
         // Default Admin is always allowed
-        $response = $this->handler->doLogin(['Email' => 'admin', 'Password' => 'password'], $form, $request);
+        $admin = Environment::getEnv('SS_DEFAULT_ADMIN_USERNAME');
 
+        $password = Environment::getEnv('SS_DEFAULT_ADMIN_PASSWORD');
         $this->assertEquals(302, $response->getStatusCode());
+
         $this->assertNotContains('lostpassword', $response->getHeader('location'));
+        //don't run the test if default admin or password are missing
         $member = Security::getCurrentUser();
-        $this->assertTrue(DefaultAdminService::isDefaultAdmin($member->Email));
+        if (!$admin || !$password) {
+            $this->assertTrue(DefaultAdminService::isDefaultAdmin($member->Email));
+            $this->markTestSkipped();
+        } else {
+            $response = $this->handler->doLogin(['Email' => $admin, 'Password' => $password], $form, $request);
+
+            $this->assertEquals(302, $response->getStatusCode());
+            $this->assertNotContains('lostpassword', $response->getHeader('location'));
+            $member = Security::getCurrentUser();
+            $this->assertTrue(DefaultAdminService::isDefaultAdmin($member->Email));
+        }
     }
 
     protected function setUp()
