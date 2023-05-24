@@ -22,7 +22,6 @@ jobs:
     working_directory: ~/var/www
 
     steps:
-      - run: apt-get update && apt-get install -y apt-transport-https lsb-release netcat
       # Install additional requirements
       - run: composer self-update
       - checkout
@@ -44,7 +43,6 @@ jobs:
             - resources
 
       # run tests!
-      - run: until nc -z -v -w30 127.0.0.1 3306; do sleep 1; done
       - run: vendor/bin/sake dev/build flush=all skipannotation=true
       - run: vendor/bin/phpunit --coverage-clover=coverage.xml --log-junit ./coverage/junit.xml -d memory_limit=512M tests/unit
       - run: bash <(curl -s https://codecov.io/bash) -f coverage.xml
