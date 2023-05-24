@@ -23,7 +23,7 @@ jobs:
 
     steps:
       # Install additional requirements
-      # - checkout
+      - checkout
       - restore_cache:
           keys:
             - v2-cache-{{ checksum "composer.lock" }}
