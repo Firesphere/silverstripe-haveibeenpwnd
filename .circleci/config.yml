@@ -23,7 +23,6 @@ jobs:
 
     steps:
       # Install additional requirements
-      - run: composer self-update
       - checkout
       - restore_cache:
           keys:
