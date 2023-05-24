@@ -12,7 +12,7 @@ jobs:
           - SS_ENVIRONMENT_TYPE=test
           - SS_DEFAULT_ADMIN_USERNAME=admin
           - SS_DEFAULT_ADMIN_PASSWORD=password
-      - image: circleci/mysql:5.7
+      - image: cimg/mysql:5.7
         environment:
           - MYSQL_USER=toor
           - MYSQL_ROOT_PASSWORD=ubuntu
@@ -23,7 +23,7 @@ jobs:
 
     steps:
       # Install additional requirements
-      - checkout
+      # - checkout
       - restore_cache:
           keys:
             - v2-cache-{{ checksum "composer.lock" }}
