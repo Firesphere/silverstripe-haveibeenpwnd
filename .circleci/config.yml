@@ -6,7 +6,7 @@ jobs:
         environment:
           - SS_DATABASE_CLASS=MySQLPDODatabase
           - SS_DATABASE_SERVER=127.0.0.1
-          - SS_DATABASE_USERNAME=root
+          - SS_DATABASE_USERNAME=toor
           - SS_DATABASE_PASSWORD=ubuntu
           - SS_DATABASE_NAME=circle_test
           - SS_ENVIRONMENT_TYPE=test
@@ -14,7 +14,7 @@ jobs:
           - SS_DEFAULT_ADMIN_PASSWORD=password
       - image: circleci/mysql:5.7
         environment:
-          - MYSQL_USER=root
+          - MYSQL_USER=toor
           - MYSQL_ROOT_PASSWORD=ubuntu
           - MYSQL_DATABASE=circle_test
           - MYSQL_HOST=127.0.0.1
