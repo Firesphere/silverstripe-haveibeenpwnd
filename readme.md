@@ -98,10 +98,6 @@ Simply put? Sure. Admitted, this is Open Source software, and in theory, you can
 
 You can license this work, by buying a usage subscription. It will allow you to request support, or just supporting the developer.
 
-### But it is licensed BSD!
-
-Yes, it is and you can use it as such. I'd just appreciate a bit of help every now and then.
-
 # Did you read this entire readme? You rock!
 
 Pictured below is a cow, just for you.
