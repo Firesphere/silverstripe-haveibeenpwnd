@@ -4,6 +4,10 @@
 [![Scrutinizer Code Quality](https://scrutinizer-ci.com/g/Firesphere/silverstripe-haveibeenpwnd/badges/quality-score.png?b=master)](https://scrutinizer-ci.com/g/Firesphere/silverstripe-haveibeenpwnd/?branch=master)
 [![Code Intelligence Status](https://scrutinizer-ci.com/g/Firesphere/silverstripe-haveibeenpwnd/badges/code-intelligence.svg?b=master)](https://scrutinizer-ci.com/code-intelligence)
 
+# Moved
+
+See https://codeberg.org/Firesphere/silverstripe-haveibeenpwned
+
 # _**WARNING**_
 
 This module is not a replacement for two factor authentication.
